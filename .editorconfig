@@ -1,5 +1,6 @@
 root = true
 
 # 4 space indentation, otherwise github/gitlab renders horrible 8 spaces for tabs
+[*]
 indent_style = space
 indent_size = 4
