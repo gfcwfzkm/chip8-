@@ -1,4 +1,4 @@
-# CHIP-8 Emulator
+# CHIP-8 Emulator (OUTDATED)
 
 ### Class Diagram
 The class diagram looks as following:
