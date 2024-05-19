@@ -1,0 +1,11 @@
+{
+	// If you want to pass over arguments from within vscode's run / debug command, 
+	// you can use the following settings.
+    "cmake.debugConfig": {
+        "args": [	// Arguments to pass to the program in order (top is first, bottom is last)
+		"..\\CHIP8ROMS\\test-suite\\4-flags.ch8"
+    //        "-FirstArgument",	
+    //        "-SecondArgument"
+        ]
+    }
+}
