@@ -29,13 +29,13 @@ namespace CHIP8::Instructions
 		 * @return bool (true) : Notify the CPU that the instruction was executed
 		 */
 		bool Execute(CPU *cpu) override {
-			if (cpu->getQuirks().Jump)
+			if (cpu->GetQuirks().Jump)
 			{
-				cpu->setPC(address + cpu->getRegister(registerX));
+				cpu->SetPC(address + cpu->GetRegister(registerX));
 			}
 			else
 			{
-				cpu->setPC(address + cpu->getRegister(0));
+				cpu->SetPC(address + cpu->GetRegister(0));
 			}
 			
 			return true;

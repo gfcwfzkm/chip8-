@@ -26,16 +26,16 @@ namespace CHIP8::Instructions
 		 */
 		bool Execute(CPU *cpu) override {
 			// Get the keypad
-			CHIP8::Keypad::Key keypad = cpu->getKeypad()->WaitForKeyPress();
+			CHIP8::Keypad::Key keypad = cpu->GetKeypad()->WaitForKeyPress();
 
 			if (keypad != CHIP8::Keypad::Key::KEY_INVALID) {
 				// Store the key in the register
-				cpu->setRegister(registerVX, (uint8_t)keypad);
+				cpu->SetRegister(registerVX, (uint8_t)keypad);
 			}
 			else
 			{
 				// Decrement the program counter to repeat the instruction
-				cpu->setPC(cpu->getPC() - 2);
+				cpu->SetPC(cpu->GetPC() - 2);
 			}
 
 			return true;

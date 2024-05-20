@@ -26,9 +26,9 @@ namespace CHIP8::Instructions
 		 * @return bool (true) : Notify the CPU that the instruction was executed
 		 */
 		bool Execute(CPU *cpu) override {
-			bool notBorrow = cpu->getRegister(registerVY) >= cpu->getRegister(registerVX);
-			cpu->setRegister(registerVX, cpu->getRegister(registerVY) - cpu->getRegister(registerVX));
-			cpu->setRegister(0xF, notBorrow);
+			bool notBorrow = cpu->GetRegister(registerVY) >= cpu->GetRegister(registerVX);
+			cpu->SetRegister(registerVX, cpu->GetRegister(registerVY) - cpu->GetRegister(registerVX));
+			cpu->SetRegister(0xF, notBorrow);
 			return true;
 		};
 

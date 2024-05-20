@@ -26,9 +26,9 @@ namespace CHIP8::Instructions
 		 */
 		bool Execute(CPU *cpu) override {
 
-			if (cpu->getKeypad()->IsKeyPressed((CHIP8::Keypad::Key)cpu->getRegister(registerVX)) == true)
+			if (cpu->GetKeypad()->IsKeyPressed((CHIP8::Keypad::Key)cpu->GetRegister(registerVX)) == true)
 			{
-				cpu->setPC(cpu->getPC() + 2);
+				cpu->SetPC(cpu->GetPC() + 2);
 			}
 			return true;
 		};

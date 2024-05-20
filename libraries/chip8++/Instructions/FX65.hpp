@@ -27,12 +27,12 @@ namespace CHIP8::Instructions
 		bool Execute(CPU *cpu) override {
 			for (uint8_t i = 0; i <= registerVX; i++)
 			{
-				cpu->setRegister(i, cpu->getMemory()->GetByte(cpu->getIndex() + i));
+				cpu->SetRegister(i, cpu->GetMemory()->GetByte(cpu->GetIndex() + i));
 			}
 			
-			if (cpu->getQuirks().MemoryIncrementByX)
+			if (cpu->GetQuirks().MemoryIncrementByX)
 			{
-				cpu->setIndex(cpu->getIndex() + registerVX + 1);
+				cpu->SetIndex(cpu->GetIndex() + registerVX + 1);
 			}
 			
 			return true;

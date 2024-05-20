@@ -26,9 +26,9 @@ namespace CHIP8::Instructions
 		 * @return bool (true) : Notify the CPU that the instruction was executed
 		 */
 		bool Execute(CPU *cpu) override {
-			if (cpu->getRegister(registerVX) != cpu->getRegister(registerVY))
+			if (cpu->GetRegister(registerVX) != cpu->GetRegister(registerVY))
 			{
-				cpu->setPC(cpu->getPC() + 2);
+				cpu->SetPC(cpu->GetPC() + 2);
 			}
 			return true;
 		};

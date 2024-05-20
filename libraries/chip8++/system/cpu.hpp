@@ -29,13 +29,13 @@ namespace CHIP8
 		 * 
 		 * This constant represents the depth of the stack.
 		 */
-		static constexpr size_t STACKDEPTH	= 16;
+		static constexpr int STACKDEPTH	= 16;
 
 		/** @brief Number of work registers
 		 * 
 		 * This constant represents the number of work registers.
 		 */
-		static constexpr size_t WORK_REGS	= 16;
+		static constexpr int WORK_REGS	= 16;
 
 		/** @brief Work registers
 		 * 
@@ -141,7 +141,7 @@ namespace CHIP8
 		 * @param reg : The register to set the value of
 		 * @param value : The value to set the register to
 		 */
-		void setRegister(uint8_t reg, uint8_t value);
+		void SetRegister(uint8_t reg, uint8_t value);
 
 		/**
 		 * @brief Get the Register
@@ -151,7 +151,7 @@ namespace CHIP8
 		 * @param reg : The register to get the value of
 		 * @return uint8_t : The value of the register
 		 */
-		uint8_t getRegister(uint8_t reg);
+		uint8_t GetRegister(uint8_t reg);
 
 		/**
 		 * @brief Set the Index
@@ -160,7 +160,7 @@ namespace CHIP8
 		 * 
 		 * @param value : The value to set the index register to
 		 */
-		void setIndex(uint16_t value);
+		void SetIndex(uint16_t value);
 
 		/**
 		 * @brief Get the Index
@@ -169,7 +169,7 @@ namespace CHIP8
 		 * 
 		 * @return uint16_t : The value of the index register
 		 */
-		uint16_t getIndex();
+		uint16_t GetIndex();
 
 		/**
 		 * @brief Set the PC
@@ -178,7 +178,7 @@ namespace CHIP8
 		 * 
 		 * @param value : The value to set the program counter to
 		 */
-		void setPC(uint16_t value);
+		void SetPC(uint16_t value);
 
 		/**
 		 * @brief Get the PC
@@ -187,7 +187,7 @@ namespace CHIP8
 		 * 
 		 * @return uint16_t : The value of the program counter
 		 */
-		uint16_t getPC();
+		uint16_t GetPC();
 
 		/**
 		 * @brief Push a value onto the stack
@@ -196,7 +196,7 @@ namespace CHIP8
 		 * 
 		 * @param value : The value to push onto the stack
 		 */
-		void pushStack(uint16_t value);
+		void PushStack(uint16_t value);
 
 		/**
 		 * @brief Pop a value from the stack
@@ -205,7 +205,7 @@ namespace CHIP8
 		 * 
 		 * @return uint16_t : The value popped from the stack
 		 */
-		uint16_t popStack();
+		uint16_t PopStack();
 
 		/**
 		 * @brief Get the Display object
@@ -214,7 +214,7 @@ namespace CHIP8
 		 * 
 		 * @return Display* : The display object
 		 */
-		std::shared_ptr<Display> getDisplay();
+		std::shared_ptr<Display> GetDisplay();
 
 		/**
 		 * @brief Get the Keypad object
@@ -223,7 +223,7 @@ namespace CHIP8
 		 * 
 		 * @return Keypad* : The keypad object
 		 */
-		std::shared_ptr<Keypad> getKeypad();
+		std::shared_ptr<Keypad> GetKeypad();
 
 		/**
 		 * @brief Get the Memory object
@@ -232,7 +232,7 @@ namespace CHIP8
 		 * 
 		 * @return Memory* : The memory object
 		 */
-		std::shared_ptr<Memory> getMemory();
+		std::shared_ptr<Memory> GetMemory();
 
 		/**
 		 * @brief Get the Instruction Decoder object
@@ -241,7 +241,7 @@ namespace CHIP8
 		 * 
 		 * @return InstructionDecoder* : The instruction decoder object
 		 */
-		std::shared_ptr<InstructionDecoder> getDecoder();
+		std::shared_ptr<InstructionDecoder> GetDecoder();
 
 		/**
 		 * @brief Get the Quirks object
@@ -250,7 +250,7 @@ namespace CHIP8
 		 * 
 		 * @return Quirks* : The quirks object
 		 */
-		Quirks &getQuirks();
+		Quirks &GetQuirks();
 
 		/**
 		 * @brief Get Instruction Error
@@ -261,7 +261,7 @@ namespace CHIP8
 		 */
 		const std::string &GetInstructionError();
 
-		std::shared_ptr<Timers> getTimers();
+		std::shared_ptr<Timers> GetTimers();
 	};
 }
 

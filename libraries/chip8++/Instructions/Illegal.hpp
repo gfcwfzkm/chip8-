@@ -24,7 +24,7 @@ namespace CHIP8::Instructions
 		 * @return bool (false) : Notify the CPU that the instruction is illegal
 		 */
 		bool Execute(CPU *cpu) override { 
-			address = cpu->getPC() - 2;
+			address = cpu->GetPC() - 2;
 			return false;
 		};
 

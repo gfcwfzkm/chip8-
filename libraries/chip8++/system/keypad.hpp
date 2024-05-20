@@ -68,11 +68,11 @@ namespace CHIP8
 						return static_cast<enum Key>(i);
 					}
 				}
-				updateKeys();
+				UpdateKeys();
 			}
 		}
 
-		virtual void updateKeys() = 0;
+		virtual void UpdateKeys() = 0;
 	};    
 } // namespace CHIP8
 

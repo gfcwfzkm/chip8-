@@ -10,12 +10,12 @@ Chip8Test::Chip8Test()
 
 	cpu = new CHIP8::CPU(keypad, display);
 
-	cpu->getDisplay()->Update();
+	cpu->GetDisplay()->Update();
 }
 
 void Chip8Test::loadRom(const std::string &filename)
 {
-	cpu->getMemory()->LoadRomFile(filename);
+	cpu->GetMemory()->LoadRomFile(filename);
 }
 
 void Chip8Test::playRom()
@@ -29,19 +29,19 @@ void Chip8Test::playRom()
 	{
 		running = cpu->RunCycle();
 
-		cpu->getKeypad()->updateKeys();
+		cpu->GetKeypad()->UpdateKeys();
 
-		if (cpu->getDisplay()->GetUpdateRequired())
+		if (cpu->GetDisplay()->IsUpdateRequired())
 		{
-			std::static_pointer_cast<Display>(cpu->getDisplay())->setBeep(cpu->getTimers()->getBeeperState());
+			std::static_pointer_cast<Display>(cpu->GetDisplay())->setBeep(cpu->GetTimers()->GetBeeperState());
 			
-			cpu->getDisplay()->Update();
+			cpu->GetDisplay()->Update();
 			std::this_thread::sleep_for(std::chrono::milliseconds(15));
 		}
 
 		if (std::chrono::steady_clock::now() - lastTimerUpdate > timerUpdateTime)
 		{
-			cpu->getTimers()->decrementTimers();
+			cpu->GetTimers()->DecrementTimers();
 			lastTimerUpdate = std::chrono::steady_clock::now();
 		}
 

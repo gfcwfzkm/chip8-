@@ -28,18 +28,18 @@ namespace CHIP8::Instructions
 		bool Execute(CPU *cpu) override {
 			bool flag;
 
-			if (cpu->getQuirks().Shift)
+			if (cpu->GetQuirks().Shift)
 			{
-				flag = cpu->getRegister(registerVX) & 0x01;
-				cpu->setRegister(registerVX, cpu->getRegister(registerVX) >> 1);
+				flag = cpu->GetRegister(registerVX) & 0x01;
+				cpu->SetRegister(registerVX, cpu->GetRegister(registerVX) >> 1);
 			}
 			else
 			{
-				flag = cpu->getRegister(registerVY) & 0x01;
-				cpu->setRegister(registerVX, cpu->getRegister(registerVY) >> 1);
+				flag = cpu->GetRegister(registerVY) & 0x01;
+				cpu->SetRegister(registerVX, cpu->GetRegister(registerVY) >> 1);
 			}
 			
-			cpu->setRegister(0xF, flag);
+			cpu->SetRegister(0xF, flag);
 			return true;
 		};
 

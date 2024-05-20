@@ -25,9 +25,9 @@ namespace CHIP8::Instructions
 		 * @return bool (true) : Notify the CPU that the instruction was executed
 		 */
 		bool Execute(CPU *cpu) override {
-			if (cpu->getKeypad()->IsKeyPressed((CHIP8::Keypad::Key)cpu->getRegister(registerVX)) == false)
+			if (cpu->GetKeypad()->IsKeyPressed((CHIP8::Keypad::Key)cpu->GetRegister(registerVX)) == false)
 			{
-				cpu->setPC(cpu->getPC() + 2);
+				cpu->SetPC(cpu->GetPC() + 2);
 			}
 			return true;
 		};

@@ -28,7 +28,7 @@ namespace CHIP8::Instructions
 		 */
 		bool Execute(CPU *cpu) override {
 			uint8_t randomByte = std::rand() % 256;
-			cpu->setRegister(registerVX, randomByte & valueKK);
+			cpu->SetRegister(registerVX, randomByte & valueKK);
 			return true;
 		};
 

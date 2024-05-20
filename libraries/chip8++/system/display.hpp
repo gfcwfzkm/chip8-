@@ -62,7 +62,7 @@ namespace CHIP8
 		 * 
 		 * @return bool : Returns true if the display needs to be updated
 		 */
-		virtual bool GetUpdateRequired()
+		virtual bool IsUpdateRequired()
 		{
 			return UpdateRequired;
 		}
@@ -147,10 +147,7 @@ namespace CHIP8
 		 * 
 		 * This function updates the display with the current state of the display buffer.
 		 */
-		virtual void Update()
-		{
-
-		};
+		virtual void Update() = 0;
 	};
 }
 

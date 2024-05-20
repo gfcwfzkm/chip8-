@@ -19,6 +19,7 @@ namespace CHIP8
 	 */
     class Timers
 	{
+	protected:
         uint8_t delayTimer;
         uint8_t soundTimer;
 		bool beeperState;
@@ -28,7 +29,18 @@ namespace CHIP8
 		 * 
 		 * This constructor initializes the delay and sound timers to zero.
 		 */
-		Timers() : delayTimer(0), soundTimer(0) {};
+		Timers() : delayTimer(0), soundTimer(0), beeperState(false) {};
+
+		/**
+		 * @brief Reset the timers
+		 * 
+		 * This function resets the delay and sound timers to zero.
+		 */
+		void Reset()
+		{
+			delayTimer = 0;
+			soundTimer = 0;
+		}
 
 		/**
 		 * @brief Set the delay timer
@@ -37,7 +49,8 @@ namespace CHIP8
 		 * 
 		 * @param value : The value to set the delay timer to
 		 */
-		void setDelayTimer(uint8_t value) {
+		void SetDelayTimer(uint8_t value)
+		{
 			delayTimer = value;
 		}
 
@@ -48,7 +61,8 @@ namespace CHIP8
 		 * 
 		 * @return uint8_t : The value of the delay timer
 		 */
-		uint8_t getDelayTimer() {
+		uint8_t GetDelayTimer()
+		{
 			return delayTimer;
 		}
 
@@ -59,12 +73,13 @@ namespace CHIP8
 		 * 
 		 * @return uint8_t : The value of the sound timer
 		 */
-		void setSoundTimer(uint8_t value) {
+		void SetSoundTimer(uint8_t value)
+		{
 			soundTimer = value;
 			if (soundTimer > 0)
-				updateBeeper(true);
+				UpdateBeeper(true);
 			else
-				updateBeeper(false);
+				UpdateBeeper(false);
 		}
 
 		/**
@@ -74,14 +89,15 @@ namespace CHIP8
 		 * 
 		 * @return uint8_t : The value of the sound timer
 		 */
-		void decrementTimers() {
+		void DecrementTimers()
+		{
 			if (delayTimer > 0) {
 				delayTimer--;
 			}
 			if (soundTimer > 0) {
 				soundTimer--;
 				if (soundTimer == 0) {
-					updateBeeper(false);
+					UpdateBeeper(false);
 				}
 			}
 		}
@@ -93,7 +109,8 @@ namespace CHIP8
 		 * 
 		 * @return uint8_t : The value of the sound timer
 		 */
-		virtual void updateBeeper(bool beeperState) {
+		virtual void UpdateBeeper(bool beeperState)
+		{
 			this->beeperState = beeperState;
 		}
 
@@ -104,7 +121,8 @@ namespace CHIP8
 		 * 
 		 * @return bool : The state of the buzzer
 		 */
-		virtual bool getBeeperState() {
+		virtual bool GetBeeperState()
+		{
 			return beeperState;
 		}
     };

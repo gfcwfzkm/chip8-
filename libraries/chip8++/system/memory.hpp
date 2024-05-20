@@ -79,7 +79,7 @@ namespace CHIP8
 		 * 
 		 * This constructor initializes the memory with the default font.
 		 */
-		Memory() : memory() {
+		Memory() : memory({0}) {
 			LoadFont();
 		};
 
@@ -174,24 +174,13 @@ namespace CHIP8
 		};
 
 		/**
-		 * @brief Get the memory
-		 * 
-		 * This function returns a reference to the memory array.
-		 * 
-		 * @return std::array<uint8_t, MEMORY_SIZE>& : Reference to the memory array
-		 */
-		std::array<uint8_t, MEMORY_SIZE> &getMemory(void) {
-			return memory;
-		};
-
-		/**
 		 * @brief Get the starting address of the font
 		 * 
 		 * This function returns the starting address of the font.
 		 * 
 		 * @return uint16_t : Starting address of the font 
 		 */
-		uint16_t getFontStart(void) {
+		uint16_t GetFontStart(void) {
 			return DEFAULT_FONT_START;
 		};
 	};

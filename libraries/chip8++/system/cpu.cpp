@@ -56,37 +56,37 @@ bool CPU::RunCycle()
 	return successfulInstruction;
 }
 
-void CPU::setRegister(uint8_t reg, uint8_t value)
+void CPU::SetRegister(uint8_t reg, uint8_t value)
 {
 	V.at(reg) = value;
 }
 
-uint8_t CPU::getRegister(uint8_t reg)
+uint8_t CPU::GetRegister(uint8_t reg)
 {
 	return V.at(reg);
 }
 
-void CPU::setIndex(uint16_t value)
+void CPU::SetIndex(uint16_t value)
 {
 	I = value;
 }
 
-uint16_t CPU::getIndex()
+uint16_t CPU::GetIndex()
 {
 	return I;
 }
 
-void CPU::setPC(uint16_t value)
+void CPU::SetPC(uint16_t value)
 {
 	PC = value;
 }
 
-uint16_t CPU::getPC()
+uint16_t CPU::GetPC()
 {
 	return PC;
 }
 
-void CPU::pushStack(uint16_t value)
+void CPU::PushStack(uint16_t value)
 {
 	if (SP >= STACKDEPTH) {
 		throw std::overflow_error("CHIP8: Stack overflow");
@@ -94,7 +94,7 @@ void CPU::pushStack(uint16_t value)
 	Stack.at(SP++) = value;
 }
 
-uint16_t CPU::popStack()
+uint16_t CPU::PopStack()
 {
 	if (SP == 0) {
 		throw std::underflow_error("CHIP8: Stack underflow");
@@ -102,27 +102,27 @@ uint16_t CPU::popStack()
 	return Stack.at(--SP);
 }
 
-std::shared_ptr<Display> CPU::getDisplay()
+std::shared_ptr<Display> CPU::GetDisplay()
 {
 	return display;
 }
 
-std::shared_ptr<Keypad> CPU::getKeypad()
+std::shared_ptr<Keypad> CPU::GetKeypad()
 {
 	return keypad;
 }
 
-std::shared_ptr<Memory> CPU::getMemory()
+std::shared_ptr<Memory> CPU::GetMemory()
 {
 	return memory;
 }
 
-std::shared_ptr<InstructionDecoder> CPU::getDecoder()
+std::shared_ptr<InstructionDecoder> CPU::GetDecoder()
 {
 	return decoder;
 }
 
-Quirks &CPU::getQuirks()
+Quirks &CPU::GetQuirks()
 {
 	return quirks;
 }
@@ -132,7 +132,7 @@ const std::string &CPU::GetInstructionError()
 	return InstructionError;
 }
 
-std::shared_ptr<Timers> CPU::getTimers()
+std::shared_ptr<Timers> CPU::GetTimers()
 {
 	return timers;
 }

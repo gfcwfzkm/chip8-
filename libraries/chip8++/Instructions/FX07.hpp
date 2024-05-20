@@ -25,7 +25,7 @@ namespace CHIP8::Instructions
 		 * @return bool (true) : Notify the CPU that the instruction was executed
 		 */
 		bool Execute(CPU *cpu) override {
-			cpu->setRegister(registerVX, cpu->getTimers()->getDelayTimer());
+			cpu->SetRegister(registerVX, cpu->GetTimers()->GetDelayTimer());
 			return true;
 		};
 

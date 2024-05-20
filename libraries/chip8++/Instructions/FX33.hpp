@@ -25,10 +25,10 @@ namespace CHIP8::Instructions
 		 * @return bool (true) : Notify the CPU that the instruction was executed
 		 */
 		bool Execute(CPU *cpu) override {
-			uint8_t value = cpu->getRegister(registerVX);
-			cpu->getMemory()->SetByte(cpu->getIndex(), value / 100);
-			cpu->getMemory()->SetByte(cpu->getIndex() + 1, (value / 10) % 10);
-			cpu->getMemory()->SetByte(cpu->getIndex() + 2, value % 10);
+			uint8_t value = cpu->GetRegister(registerVX);
+			cpu->GetMemory()->SetByte(cpu->GetIndex(), value / 100);
+			cpu->GetMemory()->SetByte(cpu->GetIndex() + 1, (value / 10) % 10);
+			cpu->GetMemory()->SetByte(cpu->GetIndex() + 2, value % 10);
 			return true;
 		};
 

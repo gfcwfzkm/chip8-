@@ -28,16 +28,16 @@ namespace CHIP8::Instructions
 		 * @return bool (true) : Notify the CPU that the instruction was executed
 		 */
 		bool Execute(CPU *cpu) override {
-			auto Display = cpu->getDisplay();
-			uint8_t DisplayX = cpu->getRegister(RegX) % Display->GetWidth();
-			uint8_t DisplayY = cpu->getRegister(RegY) % Display->GetHeight();
+			auto Display = cpu->GetDisplay();
+			uint8_t DisplayX = cpu->GetRegister(RegX) % Display->GetWidth();
+			uint8_t DisplayY = cpu->GetRegister(RegY) % Display->GetHeight();
 			uint8_t SpriteByte;
 			bool collision = false;
-			bool WrapQuirk = cpu->getQuirks().WrapSprite;
+			bool WrapQuirk = cpu->GetQuirks().WrapSprite;
 
 			for (int iy = 0; iy < SpritesN; iy++)
 			{
-				SpriteByte = cpu->getMemory()->GetByte(cpu->getIndex() + iy);
+				SpriteByte = cpu->GetMemory()->GetByte(cpu->GetIndex() + iy);
 				for(int ix = 0; ix < 8; ix++)
 				{
 					int SpriteX = (DisplayX + ix);
@@ -68,7 +68,7 @@ namespace CHIP8::Instructions
 			}
 
 			Display->SetUpdateRequired();
-			cpu->setRegister(0xF, collision ? 1 : 0);
+			cpu->SetRegister(0xF, collision ? 1 : 0);
 			
 			return true;
 		};

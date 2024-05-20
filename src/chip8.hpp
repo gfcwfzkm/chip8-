@@ -82,12 +82,12 @@ namespace CHIP8Demo
 					return static_cast<enum Key>(i);
 				}
 			}
-			updateKeys();
+			UpdateKeys();
 						
 			return Key::KEY_INVALID;
 		}
 
-		void updateKeys() override
+		void UpdateKeys() override
 		{
 			if (kbhit())
 			{

@@ -27,15 +27,15 @@ namespace CHIP8::Instructions
 		 */
 		bool Execute(CPU *cpu) override
 		{
-			if (cpu->getQuirks().CatchEndlessJump)
+			if (cpu->GetQuirks().CatchEndlessJump)
 			{
-				if (address == (cpu->getPC() - 2))
+				if (address == (cpu->GetPC() - 2))
 				{
 					return false;
 				}
 			}
 			
-			cpu->setPC(address);
+			cpu->SetPC(address);
 			return true;
 		};
 

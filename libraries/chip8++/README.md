@@ -1,5 +1,3 @@
-# CHIP-8 Emulator (OUTDATED)
-
 ### Class Diagram
 The class diagram looks as following:
 ```mermaid
@@ -7,12 +5,8 @@ The class diagram looks as following:
 title: CHIP-8 Emulator
 ---
 classDiagram
-
-    note for Chip8 "The main class that holds all the components of the emulator."
     
-	Chip8 *-- CPU
-
-    CPU *-- Display
+	CPU *-- Display
     CPU *-- Keypad
     CPU *-- Timers
     CPU *-- Memory
@@ -25,24 +19,23 @@ classDiagram
     
     InstructionDecoder *-- Instruction
 
-    class Chip8 {
-        +Chip8()
-        +void loadProgram(std::string)
-    }
-
     class InstructionDecoder {
 		-Array~Instruction~ InstructionTable[2^16]
-		+InstructionDecoder()
-		+void registerInstruction(Instruction)
-        +Execute(&CPU)
-        +opcode* decode(uint16_t)
+		-badInstruction : Instruction
+		+InstructionDecoder(IllegalInstruction)
+		+RegisterInstruction(Instruction)
+        +DecodeInstruction(opcode) Instruction
+		+GetBadInstruction() Instruction
     }
 
     class Instruction{
-        virtual bool Execute(CPU&)
-        virtual string getMnemonic()
-		virtual OpCodeInfo getInfo()
-		virtual Instruction* update()
+		+struct InstructionInto_t
+        +virtual Execute(CPU&) bool
+        +virtual GetMnemonic() string
+		+virtual GetDescription() string
+		+virtual GetInfo() InstructionInto_t
+		+virtual GetAbortReason() string
+		+virtual update() Instruction
     }
 
 	class IllegalInstruction{
@@ -52,57 +45,88 @@ classDiagram
     }
 
     class CPU{
-        -Array~uint8_t~ V[16]
-        -Array~uint8_t~ stack[16]
+		-int STACKDEPTH
+		-int WORK_REGS
+		-Array~uint8_t~ V[16]
+        -Array~uint8_t~ Stack[16]
+        -uint16_t SP
         -uint16_t I
         -uint16_t PC
-        -uint16_t SP
+		-std::string InstructionError
 		-InstructionDecoder decoder
-		#Memory memory
-		#Keypad keypad
-		#Display display
-		#Timers timers
-		+CPU()
-		+void Reset()
-		+bool Cycle()
-		+uint8_t getRegister(uint8_t)
-		+void setRegister(uint8_t, uint8_t)
-		+uint16_t getIndex()
-		+void setIndex(uint16_t)
-		+void setPC(uint16_t)
-		+uint16_t getPC()
-		+void pushStack(uint16_t)
-		+uint16_t popStack()
+		-Memory memory
+		-Keypad keypad
+		-Display display
+		-Timers timers
+		+CPU(keypad, display, decoder, memory, timers)
+		+Reset(fullSystemReset)
+		+RunCycle() bool
+		+SetRegister(reg, value)
+		+GetRegister(reg) int
+		+SetIndex(value)
+		+GetIndex() int
+		+SetPC(value)
+		+GetPC() int
+		+PushStack(value)
+		+PopStack() int
+		+GetDisplay() Display
+		+GetKeypad() Keypad
+		+GetDecoder() InstructionDecoder
+		+GetMemory() Memory
+		+GetTimers() Timers
+		+GetQuirks() Quirks
+		+GetInstructionError() string
     }
 
 	class Memory {
+		-int MEMORY_SIZE
+		-int DEFAULT_ROM_START
+		-int DEFAULT_FONT_START
+		-Array~uint8_t~ DEFAULT_FONT[80]
 		-Array~uint8_t~ memory[4096]
+		-LoadFont()
 		+Memory()
-		+~Memory()
-		+void fillMemory()
-		+void loadProgram(std::string)
-		+void loadBinary(std::string)
-
+		+Reset()
+		+GetByte(address) int
+		+SetByte(address, value)
+		+GetWord(address) int
+		+LoadRomFile(romPath)
+		+getFontStart() int
 	}
     
     class Keypad {        
-        virtual uint8_t getKeyState()
-        virtual uint8_t waitForKeyPress()
+		#Array~bool~ keys[16]
+		+enum Key
+		+Keypad()
+        +virtual IsKeyPressed(Key) bool
+        +virtual WaitForKeyPress() Key
+		+virtual updateKeys()
     }
 
     class Display {
-        -Array~bool~ display[64*32]
-        +void clear()
-        +void draw(uint8_t, uint8_t, uint8_t)
-        virtual void update()
+		#int WIDTH
+		#int HEIGHT
+        #Array~bool~ display[WIDTH*HEIGHT]
+		#UpdateRequired bool
+		+Display()
+		+isUpdateRequired() bool
+        +GetWidth() int
+		+GetHeight() int
+		+at(x, y) bool
+		+virtual clear()
+        +virtual update()
     }
 
     class Timers {
-        #uint8_t delayTimer
-        #uint8_t soundTimer
-
-        +void reset()
-        +virtual void update()
-        +virtual void beepToggle(bool)
+        #int delayTimer
+        #int soundTimer
+		+Timers()
+        +reset()
+		+setDelayTimer(value)
+		+getDelayTimer() int
+		+setSoundTimer(value)
+		+decrementTimers()
+		+virtual updateBeeper(beep) 
+		+virtual getBeeperState() bool
     }
 ```

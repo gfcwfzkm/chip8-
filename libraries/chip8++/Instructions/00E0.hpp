@@ -24,7 +24,7 @@ namespace CHIP8::Instructions
 		 * @return bool (true) : Notify the CPU that the instruction was executed
 		 */
 		bool Execute(CPU *cpu) override {
-			cpu->getDisplay()->Clear();
+			cpu->GetDisplay()->Clear();
 			return true;
 		};
 

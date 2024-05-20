@@ -24,7 +24,7 @@ namespace CHIP8::Instructions
 		 * @return bool (true) : Notify the CPU that the instruction was executed
 		 */
 		bool Execute(CPU *cpu) override {
-			cpu->setPC(cpu->popStack());
+			cpu->SetPC(cpu->PopStack());
 			return true;
 		};
 
