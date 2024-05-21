@@ -39,15 +39,21 @@ void CPU::Reset(bool fullSystemReset)
 	}
 }
 
-bool CPU::RunCycle()
+std::expected<bool, std::string> CPU::RunCycle()
 {
 	bool successfulInstruction;
-	uint16_t opcode = memory->GetWord(PC);
-	std::shared_ptr<Instructions::Instruction> instruction = decoder->DecodeInstruction(opcode);
+	auto opcode = memory->GetWord(PC);
+
+	if (!opcode)
+	{
+		return std::unexpected(std::format("CHIP8: Memory access error!\x1A {}", opcode.error()));
+	}
+
+	std::shared_ptr<Instructions::Instruction> instruction = decoder->DecodeInstruction(opcode.value());
 
 	if (instruction == nullptr)
 	{
-		throw std::runtime_error("CHIP8: Nullptr instruction");
+		return std::unexpected(std::format("CHIP8: Nullptr instruction at address 0x{:04X}", PC));
 	}
 	
 	PC += 2;

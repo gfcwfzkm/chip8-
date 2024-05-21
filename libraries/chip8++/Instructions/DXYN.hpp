@@ -17,6 +17,7 @@ namespace CHIP8::Instructions
 		uint8_t RegX;
 		uint8_t RegY;
 		uint8_t SpritesN;
+		std::expected<uint8_t, std::string> retValMemory;
 	public:
 		/**
 		 * @brief Execute the instruction to draw a sprite at position (VX, VY) with N bytes of sprite data starting at the address stored in I
@@ -31,13 +32,22 @@ namespace CHIP8::Instructions
 			auto Display = cpu->GetDisplay();
 			uint8_t DisplayX = cpu->GetRegister(RegX) % Display->GetWidth();
 			uint8_t DisplayY = cpu->GetRegister(RegY) % Display->GetHeight();
-			uint8_t SpriteByte;
 			bool collision = false;
 			bool WrapQuirk = cpu->GetQuirks().WrapSprite;
+			
+			// Reset the error message variable
+			// retValMemory = std::expected<uint8_t, std::string>(0);
 
 			for (int iy = 0; iy < SpritesN; iy++)
 			{
-				SpriteByte = cpu->GetMemory()->GetByte(cpu->GetIndex() + iy);
+				retValMemory = cpu->GetMemory()->GetByte(cpu->GetIndex() + iy);
+
+				// On error, break the loop
+				if (!retValMemory)
+				{
+					break;
+				}
+
 				for(int ix = 0; ix < 8; ix++)
 				{
 					int SpriteX = (DisplayX + ix);
@@ -56,7 +66,7 @@ namespace CHIP8::Instructions
 						}
 					}
 
-					if ((SpriteByte & (0x80 >> ix)) != 0)
+					if ((retValMemory.value() & (0x80 >> ix)) != 0)
 					{
 						if (Display->at(SpriteX, SpriteY))
 						{
@@ -69,8 +79,8 @@ namespace CHIP8::Instructions
 
 			Display->SetUpdateRequired();
 			cpu->SetRegister(0xF, collision ? 1 : 0);
-			
-			return true;
+
+			return retValMemory ? true : false;
 		};
 
 		/**
@@ -99,6 +109,17 @@ namespace CHIP8::Instructions
 		 */
 		InstructionInfo_t GetInfo() override {
 			return {0xD000, 0xF000};
+		}
+
+		/**
+		 * @brief Get the reason why the function returned false in Execute
+		 * 
+		 * This function provides a string that describes the reason why it failed or aborted
+		 * 
+		 * @return std::string : Returns the error report for the instruction
+		 */
+		std::string GetAbortReason() override {
+			return retValMemory.error();
 		}
 
 		/**

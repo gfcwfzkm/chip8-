@@ -6,6 +6,8 @@
 #include <string>
 #include <fstream>
 #include <ios>
+#include <expected>
+#include <format>
 
 namespace CHIP8
 {
@@ -101,10 +103,10 @@ namespace CHIP8
 		 * @param address : Address to set the byte
 		 * @param value : Value to set
 		 */
-		uint8_t GetByte(uint16_t address) {
+		std::expected<uint8_t, std::string> GetByte(uint16_t address) {
 			if (address > MEMORY_SIZE - 1)
 			{
-				throw std::out_of_range("Memory out of bounds");
+				return std::unexpected(std::format("Memory out of bounds: {} > {}", address, MEMORY_SIZE - 1));
 			}
 
 			return memory.at(address & (MEMORY_SIZE - 1));
@@ -118,13 +120,15 @@ namespace CHIP8
 		 * @param address : Address to set the byte
 		 * @param value : Value to set
 		 */
-		void SetByte(uint16_t address, uint8_t value) {
+		std::expected<void, std::string> SetByte(uint16_t address, uint8_t value) {
 			if (address > MEMORY_SIZE - 1)
 			{
-				throw std::out_of_range("Memory out of bounds");
+				return std::unexpected(std::format("Memory out of bounds: {} > {}", address, MEMORY_SIZE - 1));
 			}
 
 			memory.at(address & (MEMORY_SIZE - 1)) = value;
+
+			return std::expected<void, std::string>();
 		};
 
 		/**
@@ -135,10 +139,10 @@ namespace CHIP8
 		 * @param address : Address to set the word
 		 * @param value : Value to set
 		 */
-		uint16_t GetWord(uint16_t address) {
+		std::expected<uint16_t, std::string> GetWord(uint16_t address) {
 			if (address > MEMORY_SIZE - 2)
 			{
-				throw std::out_of_range("Memory out of bounds");
+				return std::unexpected(std::format("Memory out of bounds: {} > {}", address, MEMORY_SIZE - 1));
 			}
 			
 			return (memory.at(address & (MEMORY_SIZE - 1)) << 8) | memory.at((address + 1) & (MEMORY_SIZE - 1));
@@ -163,11 +167,13 @@ namespace CHIP8
 				}
 				else
 				{
+					file.close();
 					throw std::runtime_error("ROM too large for memory");
 				}
 			}
 			else
 			{
+				file.close();
 				throw std::runtime_error("Failed to open ROM file");
 			}
 			file.close();

@@ -23,11 +23,15 @@ void Chip8Test::playRom()
 	bool running = true;
 	auto lastTimerUpdate = std::chrono::steady_clock::now();
 	const auto timerUpdateTime = std::chrono::microseconds(1'000'000 / 60);
-
-	auto perfStart = std::chrono::steady_clock::now();
-	while (running)
+	std::expected<bool, std::string> CycleStatus;
+	while (true)
 	{
-		running = cpu->RunCycle();
+		CycleStatus = cpu->RunCycle();
+
+		if (!CycleStatus || CycleStatus.value() == false)
+		{
+			break;
+		}
 
 		cpu->GetKeypad()->UpdateKeys();
 
@@ -47,8 +51,18 @@ void Chip8Test::playRom()
 
 		std::this_thread::sleep_for(std::chrono::microseconds(500));
 	}
-	auto perfEnd = std::chrono::steady_clock::now();
 
-	std::cout << std::endl << "Emulation aborted! Reason:" << std::endl << "\x1A " << cpu->GetInstructionError() << std::endl;
-	std::cout << "Emulation took " << std::chrono::duration_cast<std::chrono::microseconds>(perfEnd - perfStart).count() << "\xE6s" << std::endl;
+	std::cout << std::endl << "Emulation aborted! Reason:" << std::endl;
+	if (!CycleStatus)
+	{
+		std::cout << "\x1A CPU Exception: \x1A " << CycleStatus.error() << std::endl;
+	}
+	else if (CycleStatus.value() == false)
+	{
+		std::cout << "\x1A " << cpu->GetInstructionError() << std::endl;
+	}
+	else
+	{
+		std::cout << "Unknown error" << std::endl;
+	}
 }

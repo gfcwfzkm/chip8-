@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <array>
 #include <stdexcept>
+#include <expected>
 #include <memory>
 #include "memory.hpp"
 #include "display.hpp"
@@ -128,10 +129,11 @@ namespace CHIP8
 		 * 
 		 * This function runs a cycle of the CPU.
 		 * 
-		 * @return true : The cycle was successful
-		 * @return false : The cycle was unsuccessful
+		 * @return std::expected<bool, std::string> : Returns true if the cycle was successful
+		 *                                            and false if an error occurred in a command,
+		 * 								OR returns an error message if an critical error occurred.
 		 */
-		bool RunCycle();
+		std::expected<bool, std::string> RunCycle();
 
 		/**
 		 * @brief Set the Register

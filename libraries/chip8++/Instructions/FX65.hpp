@@ -15,6 +15,7 @@ namespace CHIP8::Instructions
 		public std::enable_shared_from_this<IFX65>
 	{
 		uint8_t registerVX;
+		std::expected<uint8_t, std::string> retValMemory;
 	public:
 		/**
 		 * @brief Execute the instruction to fill registers V0 through VX with values from memory starting at address I
@@ -27,7 +28,16 @@ namespace CHIP8::Instructions
 		bool Execute(CPU *cpu) override {
 			for (uint8_t i = 0; i <= registerVX; i++)
 			{
-				cpu->SetRegister(i, cpu->GetMemory()->GetByte(cpu->GetIndex() + i));
+				retValMemory = cpu->GetMemory()->GetByte(cpu->GetIndex() + i);
+
+				if (retValMemory)
+				{
+					cpu->SetRegister(i, retValMemory.value());
+				}
+				else
+				{
+					break;
+				}
 			}
 			
 			if (cpu->GetQuirks().MemoryIncrementByX)
@@ -35,7 +45,7 @@ namespace CHIP8::Instructions
 				cpu->SetIndex(cpu->GetIndex() + registerVX + 1);
 			}
 			
-			return true;
+			return retValMemory ? true : false;
 		};
 
 		/**
@@ -63,6 +73,17 @@ namespace CHIP8::Instructions
 		 */
 		InstructionInfo_t GetInfo() override {
 			return {0xF065, 0xF0FF};
+		}
+
+		/**
+		 * @brief Get the reason why the function returned false in Execute
+		 * 
+		 * This function provides a string that describes the reason why it failed or aborted
+		 * 
+		 * @return std::string : Returns the error report for the instruction
+		 */
+		std::string GetAbortReason() override {
+			return retValMemory.error();
 		}
 
 		/**
