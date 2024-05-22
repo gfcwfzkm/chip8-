@@ -9,7 +9,7 @@
 #include <chrono>
 #include <map>
 #include "system/cpu.hpp"
-#include "keyin.h"
+#include "ch8_platform_specific.h"
 
 namespace CHIP8Demo
 {
@@ -108,48 +108,68 @@ namespace CHIP8Demo
 		void Update(bool optionalFakeBeep = false)
 		{
 			enum screenBorderType {TOP_LEFT = 0, TOP, TOP_RIGHT, LEFT, RIGHT, BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT};
-			const std::array<unsigned char,8> screenBorderCharsBEEP = {0xC9, 0xCD, 0xBB, 0xBA, 0xBA, 0xC8, 0xCD, 0xBC};
-			const std::array<unsigned char,8> screenBorderCharsNORMAL = {0xDA, 0xC4, 0xBF, 0xB3, 0xB3, 0xC0, 0xC4, 0xD9};
+			//const std::array<unsigned char,8> screenBorderCharsBEEP = {0xC9, 0xCD, 0xBB, 0xBA, 0xBA, 0xC8, 0xCD, 0xBC};
+			const std::array<std::string,8> screenBorderCharsBEEP = {
+				CH8_FRAMEB_UPL,
+				CH8_FRAMEB_UP,
+				CH8_FRAMEB_UPR,
+				CH8_FRAMEB_LEFT,
+				CH8_FRAMEB_RGHT,
+				CH8_FRAMEB_DNL,
+				CH8_FRAMEB_DOWN,
+				CH8_FRAMEB_DNR
+			};
+			//const std::array<unsigned char,8> screenBorderCharsNORMAL = {0xDA, 0xC4, 0xBF, 0xB3, 0xB3, 0xC0, 0xC4, 0xD9};
+			const std::array<std::string,8> screenBorderCharsNORMAL = {
+				CH8_FRAME_UPL,
+				CH8_FRAME_UP,
+				CH8_FRAME_UPR,
+				CH8_FRAME_LEFT,
+				CH8_FRAME_RGHT,
+				CH8_FRAME_DNL,
+				CH8_FRAME_DOWN,
+				CH8_FRAME_DNR
+			};
 
 			std::string textScreen;
 			const auto &screenBorder = optionalFakeBeep ? screenBorderCharsBEEP : screenBorderCharsNORMAL;
 
-			textScreen.push_back(screenBorder[TOP_LEFT]);
+			textScreen.append(screenBorder[TOP_LEFT]);
 			for (int i = 0; i < WIDTH; i++)
-				textScreen.push_back(screenBorder[TOP]);
-			textScreen.push_back(screenBorder[TOP_RIGHT]);
-			textScreen.push_back('\n');
+				textScreen.append(screenBorder[TOP]);
+			textScreen.append(screenBorder[TOP_RIGHT]);
+			textScreen.append("\n");
 
 			for (int y = 0; y < HEIGHT; y += 2)
 			{
-				textScreen.push_back(screenBorder[LEFT]);
+				textScreen.append(screenBorder[LEFT]);
 				for (int x = 0; x < WIDTH; x++)
 				{
 					if ((screenBuffer[y * WIDTH + x]) && (screenBuffer[(y+1) * WIDTH + x]))
 					{
-						textScreen.push_back('\xDB');
+						textScreen.append(CH8_BOTHPIXEL);
 					}
 					else if (screenBuffer[y * WIDTH + x])
 					{
-						textScreen.push_back('\xDF');
+						textScreen.append(CH8_UPPERPIXEL);
 					}
 					else if (screenBuffer[(y+1) * WIDTH + x])
 					{
-						textScreen.push_back('\xDC');
+						textScreen.append(CH8_LOWERPIXEL);
 					}
 					else
 					{
-						textScreen.push_back(' ');
+						textScreen.append(CH8_NOPIXEL);
 					}
 				}
-				textScreen.push_back(screenBorder[RIGHT]);
-				textScreen.push_back('\n');
+				textScreen.append(screenBorder[RIGHT]);
+				textScreen.append("\n");
 			}
 
-			textScreen.push_back(screenBorder[BOTTOM_LEFT]);
+			textScreen.append(screenBorder[BOTTOM_LEFT]);
 			for (int i = 0; i < WIDTH; i++)
-				textScreen.push_back(screenBorder[BOTTOM]);
-			textScreen.push_back(screenBorder[BOTTOM_RIGHT]);
+				textScreen.append(screenBorder[BOTTOM]);
+			textScreen.append(screenBorder[BOTTOM_RIGHT]);
 
 			std::cout << "\033[0;0H";
 			std::cout << textScreen;

@@ -25,6 +25,6 @@ endif()
 ## Source and header files of our project
 set(SOURCE_FILES
     src/mainApp.cpp
-    src/keyin.h
+    src/ch8_platform_specific.h
 	src/chip8.cpp src/chip8.hpp 
 )

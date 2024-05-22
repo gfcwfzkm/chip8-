@@ -31,12 +31,12 @@ void Chip8Test::playRom()
 		if (!CycleStatus)
 		{
 			std::cout << std::endl << "Emulator aborted! Reason:" << std::endl;
-			std::cout << "\x1A CPU Exception: \x1A " << CycleStatus.error() << std::endl;
+			std::cout << CH8_ARROW " CPU Exception: " CH8_ARROW " " << CycleStatus.error() << std::endl;
 			break;
 		}
 		else if (CycleStatus.value() == false)
 		{
-			std::cout << std::endl << "Emulator halted! \x1A " << cpu->GetInstructionError() << std::endl;
+			std::cout << std::endl << "Emulator halted! " CH8_ARROW " " << cpu->GetInstructionError() << std::endl;
 
 			if (cpu->GetInstructionError().find("Quirk") != std::string::npos)
 			{
