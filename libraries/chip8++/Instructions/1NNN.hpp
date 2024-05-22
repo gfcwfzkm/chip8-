@@ -71,7 +71,7 @@ namespace CHIP8::Instructions
 
 		std::string GetAbortReason() override
 		{
-			return std::format("While-Loop detected and emulation aborted due to enabled Quirk flag (Address 0x{:03X})", address);
+			return "Endless loop detected, emulation aborted due to enabled Quirk flag";
 		}
 
 		/**
