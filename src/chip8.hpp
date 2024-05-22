@@ -7,13 +7,12 @@
 #include <memory>
 #include <thread>
 #include <chrono>
-#include <conio.h>
 #include <map>
 #include "system/cpu.hpp"
+#include "keyin.h"
 
 namespace CHIP8Demo
 {
-	
 	/**
 	 * @brief Keyboard
 	 * 
@@ -70,9 +69,9 @@ namespace CHIP8Demo
 
 		void UpdateKeys() override
 		{
-			if (kbhit())
+			if (CH8_KBHIT())
 			{
-				const int key = getch();
+				const int key = CH8_GETCH();
 				if (keyMap.find(key) != keyMap.end())
 				{
 					keys[keyMap[key]] = true;

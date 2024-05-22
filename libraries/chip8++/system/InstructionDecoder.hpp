@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <array>
 #include <memory>
+#include <expected>
 #include "Instructions/Instruction.hpp"
 
 namespace CHIP8
@@ -44,27 +45,7 @@ namespace CHIP8
 		 * 
 		 * This destructor deletes all the instruction objects in the instruction table.
 		 */
-		~InstructionDecoder() {
-			/*
-			CHIP8::Instructions::Instruction *foundInstr = nullptr;
-			for (auto instruction : InstructionTable) {
-				if ((instruction != badInstruction) and (instruction != nullptr))
-				{
-					if (foundInstr != instruction)
-					{
-						foundInstr = instruction;
-						delete instruction;
-						instruction = nullptr;
-					}
-					else
-					{
-						instruction = nullptr;
-					}
-				}
-			}
-			delete badInstruction;
-			*/
-		}
+		~InstructionDecoder() = default;
 		
 		/**
 		 * @brief Register an instruction
@@ -73,7 +54,7 @@ namespace CHIP8
 		 * 
 		 * @param instruction 	Pointer to the instruction object
 		 */
-		void RegisterInstruction(std::shared_ptr<Instructions::Instruction> instruction) {
+		std::expected<void, std::string> RegisterInstruction(std::shared_ptr<Instructions::Instruction> instruction) {
 			auto InstructionInfo = instruction->GetInfo();
 
 			if (InstructionInfo.mask & 0xF000)
@@ -86,8 +67,9 @@ namespace CHIP8
 			}
 			else
 			{
-				std::runtime_error("Invalid mask");
+				return std::unexpected(std::format("Invalid mask, got 0x{:04X} which gets masked with 0xF000", InstructionInfo.mask));
 			}
+			return std::expected<void, std::string>();
 		}
 		
 		/**
