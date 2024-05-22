@@ -47,7 +47,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (JP V0, NNN) : Returns the mnemonic for the jump to address NNN + V0 instruction
 		 */
 		std::string GetMnemonic() override {
-			return std::format("JP V0, {:#X}", address);
+			return std::format("JP V0, 0x{:03X}", address);
 		}
 
 		/**
@@ -56,7 +56,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (Jump to address NNN + V0) : Returns the description for the jump to address NNN + V0 instruction
 		 */
 		std::string GetDescription() override {
-			return std::format("Jump to address {:#X} + V0", address);
+			return std::format("Jump to address 0x{:03X} + V0", address);
 		}
 
 		/**

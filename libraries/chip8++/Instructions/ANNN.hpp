@@ -35,7 +35,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (LD I, addr) : Returns the mnemonic for the set I to address NNN instruction
 		 */
 		std::string GetMnemonic() override {
-			return std::format("LD I, {:03X}", address);
+			return std::format("LD I, 0x{:03X}", address);
 		}
 
 		/**
@@ -44,7 +44,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (Set I to address) : Returns the description for the set I to address NNN instruction
 		 */
 		std::string GetDescription() override {
-			return std::format("Set I to {:03X}", address);
+			return std::format("Set I to 0x{:03X}", address);
 		}
 
 		/**

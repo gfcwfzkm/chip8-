@@ -36,7 +36,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (CALL NNN) : Returns the mnemonic for the call a subroutine at NNN instruction
 		 */
 		std::string GetMnemonic() override {
-			return std::format("CALL {:X}", address);
+			return std::format("CALL 0x{:X}", address);
 		}
 
 		/**
@@ -45,7 +45,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (Call subroutine at NNN) : Returns the description for the call a subroutine at NNN instruction
 		 */
 		std::string GetDescription() override {
-			return std::format("Call subroutine at {:X}", address);
+			return std::format("Call subroutine at 0x{:X}", address);
 		}
 
 		/**

@@ -49,16 +49,15 @@ std::expected<bool, std::string> CPU::RunCycle()
 		return std::unexpected(std::format("CHIP8: Memory access error!\x1A {}", opcode.error()));
 	}
 
-	std::shared_ptr<Instructions::Instruction> instruction = decoder->DecodeInstruction(opcode.value());
+	currentInstruction = decoder->DecodeInstruction(opcode.value());
 
-	if (instruction == nullptr)
+	if (currentInstruction == nullptr)
 	{
 		return std::unexpected(std::format("CHIP8: Nullptr instruction at address 0x{:04X}", PC));
 	}
 	
 	PC += 2;
-	successfulInstruction = instruction->Execute(this);
-	if (!successfulInstruction)	InstructionError = instruction->GetAbortReason();
+	successfulInstruction = currentInstruction->Execute(this);
 	return successfulInstruction;
 }
 
@@ -133,12 +132,12 @@ Quirks &CPU::GetQuirks()
 	return quirks;
 }
 
-const std::string &CPU::GetInstructionError()
-{
-	return InstructionError;
-}
-
 std::shared_ptr<Timers> CPU::GetTimers()
 {
 	return timers;
+}
+
+std::shared_ptr<Instructions::Instruction> CPU::GetCurrentInstruction()
+{
+	return currentInstruction;
 }

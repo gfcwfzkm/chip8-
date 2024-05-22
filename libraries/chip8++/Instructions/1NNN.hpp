@@ -46,7 +46,7 @@ namespace CHIP8::Instructions
 		 */
 		std::string GetMnemonic() override
 		{
-			return std::format("JP {:03X}", address);
+			return std::format("JP 0x{:03X}", address);
 		}
 
 		/**
@@ -56,7 +56,7 @@ namespace CHIP8::Instructions
 		 */
 		std::string GetDescription() override
 		{
-			return std::format("Jump to address {:03X}", address);
+			return std::format("Jump to address 0x{:03X}", address);
 		}
 
 		/**

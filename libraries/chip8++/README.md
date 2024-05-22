@@ -47,12 +47,12 @@ classDiagram
     class CPU{
 		-int STACKDEPTH
 		-int WORK_REGS
-		-Array~uint8_t~ V[16]
-        -Array~uint8_t~ Stack[16]
-        -uint16_t SP
-        -uint16_t I
-        -uint16_t PC
-		-std::string InstructionError
+		-Array~byte~ V[16]
+        -Array~byte~ Stack[16]
+        -word SP int
+        -word I int
+        -word PC int
+		-string InstructionError
 		-InstructionDecoder decoder
 		-Memory memory
 		-Keypad keypad
@@ -82,8 +82,8 @@ classDiagram
 		-int MEMORY_SIZE
 		-int DEFAULT_ROM_START
 		-int DEFAULT_FONT_START
-		-Array~uint8_t~ DEFAULT_FONT[80]
-		-Array~uint8_t~ memory[4096]
+		-Array~byte~ DEFAULT_FONT[80]
+		-Array~byte~ memory[4096]
 		-LoadFont()
 		+Memory()
 		+Reset()

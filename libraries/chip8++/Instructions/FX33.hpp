@@ -15,6 +15,7 @@ namespace CHIP8::Instructions
 		public std::enable_shared_from_this<IFX33>
 	{
 		uint8_t registerVX;
+		uint16_t registerI;
 		std::expected<void, std::string> retValMemory;
 	public:
 		/**
@@ -27,14 +28,12 @@ namespace CHIP8::Instructions
 		 */
 		bool Execute(CPU *cpu) override {
 			uint8_t value = cpu->GetRegister(registerVX);
-			uint16_t index = cpu->GetIndex();
+			registerI = cpu->GetIndex();
 			auto mem = cpu->GetMemory();
 
-			// Reset the error message variable
-			// retValMemory = std::expected<void, std::string>();
-
+			// Store the BCD representation of the value in memory
 			for (int i = 2; i >= 0; i--) {
-				retValMemory = mem->SetByte(index + i, value % 10);
+				retValMemory = mem->SetByte(registerI + i, value % 10);
 				value /= 10;
 				
 				if (!retValMemory) {
@@ -48,10 +47,10 @@ namespace CHIP8::Instructions
 		/**
 		 * @brief Returns the mnemonic for the store BCD representation of VX in memory locations I, I+1, and I+2 instruction
 		 * 
-		 * @return std::string (LD B, Vx) : Returns the mnemonic for the store BCD representation of VX in memory locations I, I+1, and I+2 instruction
+		 * @return std::string (LD BCD, Vx) : Returns the mnemonic for the store BCD representation of VX in memory locations I, I+1, and I+2 instruction
 		 */
 		std::string GetMnemonic() override {
-			return std::format("LD B, V{:X}", registerVX);
+			return std::format("LD BCD, V{:X}", registerVX);
 		}
 
 		/**
@@ -60,7 +59,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (Store BCD representation of Vx in memory locations I, I+1, and I+2) : Returns the description for the store BCD representation of VX in memory locations I, I+1, and I+2 instruction
 		 */
 		std::string GetDescription() override {
-			return std::format("Store BCD representation of V{:X} in memory locations I, I+1, and I+2", registerVX);
+			return std::format("Store BCD representation of V{:X} in memory locations I=0x{:03X}, I+1, and I+2", registerVX, registerI);
 		}
 
 		/**

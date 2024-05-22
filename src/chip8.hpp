@@ -9,6 +9,7 @@
 #include <chrono>
 #include <map>
 #include "system/cpu.hpp"
+#include "Instructions/Instruction.hpp"
 #include "ch8_platform_specific.h"
 
 namespace CHIP8Demo
@@ -40,8 +41,15 @@ namespace CHIP8Demo
 		};
 	public:
 		Keyboard() : CHIP8::Keypad() {};
-		virtual ~Keyboard() = default;
 
+		/**
+		 * @brief IsKeyPressed
+		 * 
+		 * This function checks if a key is pressed.
+		 * 
+		 * @param key The key to check.
+		 * @return bool : true if the key is pressed, false otherwise.
+		 */
 		bool IsKeyPressed(enum Key key) override
 		{
 			if (keys[key])
@@ -52,6 +60,13 @@ namespace CHIP8Demo
 			return false;
 		}
 
+		/**
+		 * @brief WaitForKeyPress
+		 * 
+		 * This function waits for a key to be pressed.
+		 * 
+		 * @return enum Key : The key that was pressed.
+		 */
 		enum Key WaitForKeyPress() override
 		{
 			for (int i = 0; i < 16; i++)
@@ -67,6 +82,11 @@ namespace CHIP8Demo
 			return Key::KEY_INVALID;
 		}
 
+		/**
+		 * @brief UpdateKeys
+		 * 
+		 * This function updates the keys.
+		 */
 		void UpdateKeys() override
 		{
 			if (CH8_KBHIT())
@@ -108,7 +128,6 @@ namespace CHIP8Demo
 		void Update(bool optionalFakeBeep = false)
 		{
 			enum screenBorderType {TOP_LEFT = 0, TOP, TOP_RIGHT, LEFT, RIGHT, BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT};
-			//const std::array<unsigned char,8> screenBorderCharsBEEP = {0xC9, 0xCD, 0xBB, 0xBA, 0xBA, 0xC8, 0xCD, 0xBC};
 			const std::array<std::string,8> screenBorderCharsBEEP = {
 				CH8_FRAMEB_UPL,
 				CH8_FRAMEB_UP,
@@ -119,7 +138,6 @@ namespace CHIP8Demo
 				CH8_FRAMEB_DOWN,
 				CH8_FRAMEB_DNR
 			};
-			//const std::array<unsigned char,8> screenBorderCharsNORMAL = {0xDA, 0xC4, 0xBF, 0xB3, 0xB3, 0xC0, 0xC4, 0xD9};
 			const std::array<std::string,8> screenBorderCharsNORMAL = {
 				CH8_FRAME_UPL,
 				CH8_FRAME_UP,

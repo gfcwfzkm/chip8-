@@ -14,7 +14,13 @@
 
 namespace CHIP8
 {
+	/** Forward Declarations */
+	namespace Instructions
+	{
+		class Instruction;
+	}
 	class InstructionDecoder;
+
 	/**
 	 * @brief CPU
 	 * 
@@ -68,12 +74,14 @@ namespace CHIP8
 		 */
 		uint16_t PC;
 
-		/** @brief Instruction Failure Description
+		/** @brief Current Instruction
 		 * 
-		 * This string holds the reason why an instruction has 
-		 * failed or stopped the emulation. 
+		 * This variable represents the current instruction.
+		 * It is a shared pointer to the instruction object.
+		 * Can be useful to retrieve the mnemonic and description as well as
+		 * the error message if the instruction fails.
 		 */
-		std::string InstructionError;
+		std::shared_ptr<Instructions::Instruction> currentInstruction;
 
 		/** @brief Instruction Decoder
 		 * 
@@ -255,15 +263,22 @@ namespace CHIP8
 		Quirks &GetQuirks();
 
 		/**
-		 * @brief Get Instruction Error
+		 * @brief Get the Timers object
 		 * 
-		 * This function returns a handle to the instruction error
+		 * This function returns the timers object.
 		 * 
-		 * @return 
+		 * @return Timers* : The timers object
 		 */
-		const std::string &GetInstructionError();
-
 		std::shared_ptr<Timers> GetTimers();
+
+		/**
+		 * @brief Get the current instruction
+		 * 
+		 * This function returns the current instruction.
+		 * 
+		 * @return std::shared_ptr<Instructions::Instruction> : The current instruction
+		 */
+		std::shared_ptr<Instructions::Instruction> GetCurrentInstruction();
 	};
 }
 

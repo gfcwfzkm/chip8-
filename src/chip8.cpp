@@ -36,9 +36,12 @@ void Chip8Test::playRom()
 		}
 		else if (CycleStatus.value() == false)
 		{
-			std::cout << std::endl << "Emulator halted! " CH8_ARROW " " << cpu->GetInstructionError() << std::endl;
+			auto lastInstruction = cpu->GetCurrentInstruction();
+			std::cout << std::endl << "Emulator halted by instruction " <<
+				lastInstruction->GetMnemonic() << " "  CH8_ARROW " " <<
+				lastInstruction->GetAbortReason() << std::endl;
 
-			if (cpu->GetInstructionError().find("Quirk") != std::string::npos)
+			if (lastInstruction->GetAbortReason().find("Quirk") != std::string::npos)
 			{
 				break;
 			}

@@ -45,7 +45,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (Add byte to register Vx) : Returns the description for the add KK to register X instruction
 		 */
 		std::string GetDescription() override {
-			return std::format("Add {:02X} to register V{:X}", immediateValue, registerV);
+			return std::format("Add 0x{:02X} to register V{:X}", immediateValue, registerV);
 		}
 
 		/**

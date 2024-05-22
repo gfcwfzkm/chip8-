@@ -38,7 +38,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (RND Vx, KK) : Returns the mnemonic for the set register VX to random byte AND KK instruction
 		 */
 		std::string GetMnemonic() override {
-			return std::format("RND V{:X}, {:#X}", registerVX, valueKK);
+			return std::format("RND V{:X}, 0x{:02X}", registerVX, valueKK);
 		}
 
 		/**
@@ -47,7 +47,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (Set Vx = random byte AND KK) : Returns the description for the set register VX to random byte AND KK instruction
 		 */
 		std::string GetDescription() override {
-			return std::format("Set V{:X} = random byte AND {:#X}", registerVX, valueKK);
+			return std::format("Set V{:X} = random byte AND 0x{:02X}", registerVX, valueKK);
 		}
 
 		/**

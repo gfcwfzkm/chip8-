@@ -98,6 +98,7 @@
 		"typeindex": "cpp",
 		"variant": "cpp",
 		"expected": "cpp",
-		"forward_list": "cpp"
+		"forward_list": "cpp",
+		"ios": "cpp"
 	}
 }

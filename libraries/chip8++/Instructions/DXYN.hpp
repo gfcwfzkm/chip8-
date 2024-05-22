@@ -89,7 +89,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (DRW) : Returns the mnemonic for the draw sprite instruction
 		 */
 		std::string GetMnemonic() override {
-			return std::format("DRAW V{:X}, V{:X}, {:X}", RegX, RegY, SpritesN);
+			return std::format("DRAW V{:X}, V{:X}, {}", RegX, RegY, SpritesN);
 		}
 
 		/**
@@ -98,7 +98,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (Draw a sprite at position (VX, VY) with N bytes of sprite data starting at the address stored in I) : Returns the description for the draw sprite instruction
 		 */
 		std::string GetDescription() override {
-			return std::format("Draw a sprite at position (V{:X}, V{:X}) with {:X} "
+			return std::format("Draw a sprite at position (V{:X}, V{:X}) with {} "
 				"bytes of sprite data starting at the address stored in I", RegX, RegY, SpritesN);
 			}
 

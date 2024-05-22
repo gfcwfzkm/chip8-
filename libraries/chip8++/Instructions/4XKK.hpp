@@ -39,7 +39,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (SNE Vx, byte) : Returns the mnemonic for the skip next instruction if Vx != KK instruction
 		 */
 		std::string GetMnemonic() override {
-			return std::format("SNE V{:X}, {:02X}", registerV, immediateValue);
+			return std::format("SNE V{:X}, 0x{:02X}", registerV, immediateValue);
 		}
 
 		/**
@@ -48,7 +48,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (Skip next instruction if Vx != byte) : Returns the description for the skip next instruction if Vx != KK instruction
 		 */
 		std::string GetDescription() override {
-			return std::format("Skip next instruction if V{:X} != {:02X}", registerV, immediateValue);
+			return std::format("Skip next instruction if V{:X} != 0x{:02X}", registerV, immediateValue);
 		}
 
 		/**

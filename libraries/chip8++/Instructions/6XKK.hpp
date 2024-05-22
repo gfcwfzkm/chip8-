@@ -36,7 +36,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (LD Vx, byte) : Returns the mnemonic for the set register X to KK instruction
 		 */
 		std::string GetMnemonic() override {
-			return std::format("LD V{:X}, {:02X}", registerV, immediateValue);
+			return std::format("LD V{:X}, 0x{:02X}", registerV, immediateValue);
 		}
 
 		/**
@@ -45,7 +45,7 @@ namespace CHIP8::Instructions
 		 * @return std::string (Set register Vx to byte) : Returns the description for the set register X to KK instruction
 		 */
 		std::string GetDescription() override {
-			return std::format("Set register V{:X} to {:02X}", registerV, immediateValue);
+			return std::format("Set register V{:X} to 0x{:02X}", registerV, immediateValue);
 		}
 
 		/**
