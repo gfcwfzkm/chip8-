@@ -155,7 +155,7 @@ namespace CHIP8
 		 * 
 		 * @param romPath : Path to the ROM file
 		 */
-		void LoadRomFile(const std::string &romPath) {
+		std::expected<void, std::string> LoadRomFile(const std::string &romPath) {
 			std::ifstream file(romPath, std::ios::binary | std::ios::ate);
 			if (file.is_open())
 			{
@@ -168,15 +168,15 @@ namespace CHIP8
 				else
 				{
 					file.close();
-					throw std::runtime_error("ROM too large for memory");
+					return std::unexpected(std::format("ROM too large for memory: {} > {}", size_t(pos), MEMORY_SIZE - DEFAULT_ROM_START));
 				}
 			}
 			else
 			{
 				file.close();
-				throw std::runtime_error("Failed to open ROM file");
+				return std::unexpected(std::format("Failed to open ROM file: {}", romPath));
 			}
-			file.close();
+			return std::expected<void, std::string>();
 		};
 
 		/**

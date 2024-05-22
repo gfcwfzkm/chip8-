@@ -9,30 +9,11 @@
 #include <chrono>
 #include <conio.h>
 #include <map>
-
 #include "system/cpu.hpp"
 
 namespace CHIP8Demo
 {
-	/**
-	 * @brief Chip8Test
-	 * 
-	 * This class represents a CHIP-8 test.
-	 * It is a basic example on how this CHIP8 library can be used by using the 
-	 * default terminal as both screen and keyboard input.
-	 */
-	class Chip8Test
-	{
-		CHIP8::CPU *cpu;		
-	public:
-		Chip8Test();
-		Chip8Test(const std::string &romPath) : Chip8Test() { loadRom(romPath); }
-
-		void loadRom(const std::string &filename);
-		void playRom();
-		CHIP8::CPU *getCpu() { return cpu; }
-	};
-
+	
 	/**
 	 * @brief Keyboard
 	 * 
@@ -99,7 +80,7 @@ namespace CHIP8Demo
 			}
 		}
 	};
-
+	
 	/**
 	 * @brief Display
 	 * 
@@ -177,6 +158,29 @@ namespace CHIP8Demo
 			UpdateRequired = false;
 		}
 	};
+
+	/**
+	 * @brief Chip8Test
+	 * 
+	 * This class represents a CHIP-8 test.
+	 * It is a basic example on how this CHIP8 library can be used by using the 
+	 * default terminal as both screen and keyboard input.
+	 */
+	class Chip8Test
+	{
+		CHIP8::CPU *cpu;
+		std::shared_ptr<Keyboard> keyboard;
+		std::shared_ptr<Display> display;
+	public:
+		Chip8Test();
+		Chip8Test(const std::string &romPath) : Chip8Test() { loadRom(romPath); }
+
+		void loadRom(const std::string &filename);
+		void playRom();
+		CHIP8::CPU *getCpu() { return cpu; }
+	};
+
+
 }
 
 #endif /* _CHIP8_HPP_ */

@@ -5,10 +5,10 @@ using namespace CHIP8Demo;
 
 Chip8Test::Chip8Test()
 {
-	std::shared_ptr<CHIP8::Display> display = std::make_shared<Display>();
-	std::shared_ptr<CHIP8::Keypad> keypad = std::make_shared<Keyboard>();
+	display = std::make_shared<Display>();
+	keyboard = std::make_shared<Keyboard>();
 
-	cpu = new CHIP8::CPU(keypad, display);
+	cpu = new CHIP8::CPU(keyboard, display);
 
 	cpu->GetDisplay()->Update();
 }
@@ -20,26 +20,58 @@ void Chip8Test::loadRom(const std::string &filename)
 
 void Chip8Test::playRom()
 {
-	bool running = true;
 	auto lastTimerUpdate = std::chrono::steady_clock::now();
 	const auto timerUpdateTime = std::chrono::microseconds(1'000'000 / 60);
 	std::expected<bool, std::string> CycleStatus;
+
 	while (true)
 	{
 		CycleStatus = cpu->RunCycle();
 
-		if (!CycleStatus || CycleStatus.value() == false)
+		if (!CycleStatus)
 		{
+			std::cout << std::endl << "Emulation aborted! Reason:" << std::endl;
+			std::cout << "\x1A CPU Exception: \x1A " << CycleStatus.error() << std::endl;
 			break;
 		}
+		else if (CycleStatus.value() == false)
+		{
+			std::cout << std::endl << "Emulation halted! Reason: " << cpu->GetInstructionError() << std::endl;
 
-		cpu->GetKeypad()->UpdateKeys();
+			if (cpu->GetInstructionError().find("Quirk") != std::string::npos)
+			{
+				break;
+			}
+
+			std::cout << "Continue emulation (Keypad C) or abort (Keypad A)? ";
+
+			enum Keyboard::Key key = Keyboard::Key::KEY_INVALID;
+			while (key != Keyboard::Key::KEY_A && key != Keyboard::Key::KEY_C)
+			{
+				key = keyboard->WaitForKeyPress();
+			}
+
+			std::cout << std::format("{}",(key == Keyboard::Key::KEY_A) ? "A" : "C");
+
+			if (key == Keyboard::Key::KEY_A)
+			{
+				break;
+			}
+			else if (key == Keyboard::Key::KEY_C)
+			{
+				// Erase the the current line, move one line up, erase it as well,
+				// move once more one line up
+				std::cout << "\33[2K \33[A \33[2K \33[A";
+				// We want to be at the same position as if a display refresh
+				// just happend
+			}
+		}
+
+		keyboard->UpdateKeys();
 
 		if (cpu->GetDisplay()->IsUpdateRequired())
 		{
-			std::static_pointer_cast<Display>(cpu->GetDisplay())->setBeep(cpu->GetTimers()->GetBeeperState());
-			
-			cpu->GetDisplay()->Update();
+			display->Update(cpu->GetTimers()->GetBeeperState());
 			std::this_thread::sleep_for(std::chrono::milliseconds(15));
 		}
 
@@ -50,19 +82,5 @@ void Chip8Test::playRom()
 		}
 
 		std::this_thread::sleep_for(std::chrono::microseconds(500));
-	}
-
-	std::cout << std::endl << "Emulation aborted! Reason:" << std::endl;
-	if (!CycleStatus)
-	{
-		std::cout << "\x1A CPU Exception: \x1A " << CycleStatus.error() << std::endl;
-	}
-	else if (CycleStatus.value() == false)
-	{
-		std::cout << "\x1A " << cpu->GetInstructionError() << std::endl;
-	}
-	else
-	{
-		std::cout << "Unknown error" << std::endl;
 	}
 }
