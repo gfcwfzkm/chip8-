@@ -1,8 +1,8 @@
 #ifndef _CHIP8_DISPLAY_HPP_
 #define _CHIP8_DISPLAY_HPP_
 
-#include <array>
 #include <cstdint>
+#include <memory>
 #include <format>
 
 namespace CHIP8
@@ -31,13 +31,26 @@ namespace CHIP8
 		 * 
 		 * This vector stores the display buffer.
 		 */
-		std::array<bool, WIDTH * HEIGHT> screenBuffer;
+		//std::array<bool, WIDTH * HEIGHT> screenBuffer;
+		std::unique_ptr<bool []> screenBuffer;
+
 
 		/** @brief Update Required
 		 * 
 		 * This flag indicates if the display needs to be updated.
 		 */
 		bool UpdateRequired = false;
+
+		/**
+		 * @brief Allocate the display buffer
+		 * 
+		 * This function allocates the display buffer.
+		 * Called by the constructor.
+		 */
+		virtual void allocateDisplay()
+		{
+			screenBuffer = std::make_unique<bool[]>(WIDTH * HEIGHT);
+		}
 	public:
 		/**
 		 * @brief Construct a new Display object
@@ -46,6 +59,7 @@ namespace CHIP8
 		 */
 		Display()
 		{
+			allocateDisplay();
 			Clear();
 		};
 
@@ -137,7 +151,7 @@ namespace CHIP8
 		 */
 		virtual void Clear()
 		{
-			screenBuffer.fill(false);
+			std::fill(screenBuffer.get(), screenBuffer.get() + WIDTH * HEIGHT, false);
 			UpdateRequired = true;
 		};
 

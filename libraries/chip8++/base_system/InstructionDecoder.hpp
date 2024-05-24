@@ -5,7 +5,7 @@
 #include <array>
 #include <memory>
 #include <expected>
-#include "Instructions/Instruction.hpp"
+#include "base_system/Instructions/Instruction.hpp"
 
 namespace CHIP8
 {

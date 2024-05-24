@@ -9,8 +9,8 @@
 #include <chrono>
 #include <map>
 #include <expected>
-#include "system/cpu.hpp"
-#include "Instructions/Instruction.hpp"
+#include "base_system/cpu.hpp"
+#include "base_system/Instructions/Instruction.hpp"
 #include "ch8_platform_specific.h"
 
 namespace CHIP8Demo

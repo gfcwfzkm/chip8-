@@ -6,7 +6,7 @@
 #include <array>
 #include <format>
 #include <memory>
-#include "../system/cpu.hpp"
+#include "../cpu.hpp"
 
 namespace CHIP8::Instructions
 {
