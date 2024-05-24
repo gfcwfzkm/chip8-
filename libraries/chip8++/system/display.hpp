@@ -4,7 +4,6 @@
 #include <array>
 #include <cstdint>
 #include <format>
-#include "exceptions.hpp"
 
 namespace CHIP8
 {
@@ -111,7 +110,7 @@ namespace CHIP8
 			if (x >= WIDTH || y >= HEIGHT)
 				throw std::out_of_range(std::format("Display::at() : Out of range access (x={}"
 					" >= WIDTH={} or y={} >= HEIGHT={})", x, WIDTH, y, HEIGHT));
-			return screenBuffer[y * WIDTH + x];
+			return screenBuffer[size_t(y * WIDTH + x)];
 		};
 
 		/**
@@ -128,7 +127,7 @@ namespace CHIP8
 			if (x >= WIDTH || y >= HEIGHT)
 				throw std::out_of_range(std::format("Display::at() : Out of range access (x={}"
 					" >= WIDTH={} or y={} >= HEIGHT={})", x, WIDTH, y, HEIGHT));
-			return screenBuffer[y * WIDTH + x];
+			return screenBuffer[size_t(y * WIDTH + x)];
 		};
 
 		/**

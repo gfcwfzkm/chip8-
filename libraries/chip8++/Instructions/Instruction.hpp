@@ -32,6 +32,8 @@ namespace CHIP8::Instructions
 			uint16_t mask;		/**< Mask to the static opcode */
 		} InstructionInfo_t;
 
+		virtual ~Instruction() = default;
+
 		/**
 		 * @brief Virtual: Execute the instruction
 		 * 

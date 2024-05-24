@@ -17,7 +17,7 @@ namespace CHIP8
 	protected:
 		std::array<bool, 16> keys;
 	public:
-		Keypad() : keys({false}) {};
+		Keypad() : keys({{false}}) {};
 
 		virtual ~Keypad() = default;
 
@@ -63,7 +63,7 @@ namespace CHIP8
 			{
 				for (int i = 0; i < 16; i++)
 				{
-					if (keys[i])
+					if (keys[size_t(i)])
 					{
 						return static_cast<enum Key>(i);
 					}

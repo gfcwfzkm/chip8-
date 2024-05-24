@@ -41,7 +41,7 @@ namespace CHIP8
 		 * This array stores the default CHIP-8 font.
 		 */
 		static constexpr std::array<uint8_t, 80> DEFAULT_FONT = 
-		{
+		{{
 			0xF0, 0x90, 0x90, 0x90, 0xF0,	// 0
 			0x20, 0x60, 0x20, 0x20, 0x70,	// 1
 			0xF0, 0x10, 0xF0, 0x80, 0xF0,	// 2
@@ -58,7 +58,7 @@ namespace CHIP8
 			0xE0, 0x90, 0x90, 0x90, 0xE0,	// D
 			0xF0, 0x80, 0xF0, 0x80, 0xF0,	// E
 			0xF0, 0x80, 0xF0, 0x80, 0x80 	// F
-		};
+		}};
 
 		/** @brief Memory
 		 * 
@@ -81,7 +81,7 @@ namespace CHIP8
 		 * 
 		 * This constructor initializes the memory with the default font.
 		 */
-		Memory() : memory({0}) {
+		Memory() : memory({{0}}) {
 			LoadFont();
 		};
 

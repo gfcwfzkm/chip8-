@@ -3,34 +3,33 @@
 
 int main(int argc, char *argv[]) 
 {
-	std::cout << "\x1B[2J\x1B[H";
+	// Check if a ROM file path was provided
 	if (argc > 1)
 	{
-		CHIP8Demo::Chip8Test emu(argv[1]);
-		try
+		CHIP8Demo::Chip8Test emu;
+
+		// Load the ROM file
+		auto result = emu.loadRom(argv[1]);
+
+		// Check if the ROM file was loaded successfully
+		if (!result)
 		{
+			std::cout << "Error: " << result.error() << std::endl;
+			return 1;
+		}
+		else 
+		{
+			// Clear the screen
+			std::cout << "\x1B[2J\x1B[H";
+			// Play the ROM file
 			emu.playRom();
+			return 0;
 		}
-		catch (const std::exception &e)
-		{
-			std::cerr << "Error playing ROM: " << e.what() << std::endl;
-			return 1;
-		}
-		catch(...)
-		{
-			std::cerr << "Unknown error playing ROM" << std::endl;
-			return 1;
-		}
-		return 0;
 	}
 	else
 	{
-		std::cout << "Usage: " << argv[0] << " <rom file>" << std::endl;
+		// Print usage information
+		std::cout << "Usage: " << argv[0] << " <path to rom file>" << std::endl;
 	}
-	
-	// suppress unused variable warning
-	(void)argv;
-	(void)argc;
-
 	return 0;
 }

@@ -8,6 +8,7 @@
 #include <thread>
 #include <chrono>
 #include <map>
+#include <expected>
 #include "system/cpu.hpp"
 #include "Instructions/Instruction.hpp"
 #include "ch8_platform_specific.h"
@@ -21,6 +22,11 @@ namespace CHIP8Demo
 	 */
 	class Keyboard : public CHIP8::Keypad
 	{
+		/** @brief Key Map
+		 * 
+		 * This map stores the key mapping.
+		 * The key mapping is used to map the console keys to the CHIP-8 keys.
+		 */
 		std::map<int, enum Key> keyMap = {
 			{ '1', Key::KEY_1 },
 			{ '2', Key::KEY_2 },
@@ -40,8 +46,6 @@ namespace CHIP8Demo
 			{ 'v', Key::KEY_F }
 		};
 	public:
-		Keyboard() : CHIP8::Keypad() {};
-
 		/**
 		 * @brief IsKeyPressed
 		 * 
@@ -107,13 +111,25 @@ namespace CHIP8Demo
 	 */
 	class Display : public CHIP8::Display
 	{
+		// Psuedo beeper, will be used since we can't beep with the console nicely
 		bool beep = false;
 	public:
+		/**
+		 * @brief Set the Beep object
+		 * 
+		 * @param value The value to set the beep to.
+		 */
 		void setBeep(bool value)
 		{
 			beep = value;
 		}
 
+		/**
+		 * @brief Update the display
+		 * 
+		 * This function updates the display and is required to
+		 * implement the CHIP8::Display interface.
+		 */
 		void Update() override
 		{
 			Update(beep);
@@ -127,7 +143,9 @@ namespace CHIP8Demo
 		 */
 		void Update(bool optionalFakeBeep = false)
 		{
+			// Screen border characters
 			enum screenBorderType {TOP_LEFT = 0, TOP, TOP_RIGHT, LEFT, RIGHT, BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT};
+			// Thicker border for the BEEP mode
 			const std::array<std::string,8> screenBorderCharsBEEP = {
 				CH8_FRAMEB_UPL,
 				CH8_FRAMEB_UP,
@@ -138,6 +156,7 @@ namespace CHIP8Demo
 				CH8_FRAMEB_DOWN,
 				CH8_FRAMEB_DNR
 			};
+			// Normal border
 			const std::array<std::string,8> screenBorderCharsNORMAL = {
 				CH8_FRAME_UPL,
 				CH8_FRAME_UP,
@@ -149,20 +168,27 @@ namespace CHIP8Demo
 				CH8_FRAME_DNR
 			};
 
+			// Screen buffer
 			std::string textScreen;
+
+			// Are we beepin'?
 			const auto &screenBorder = optionalFakeBeep ? screenBorderCharsBEEP : screenBorderCharsNORMAL;
 
+			// Draw the upper border
 			textScreen.append(screenBorder[TOP_LEFT]);
 			for (int i = 0; i < WIDTH; i++)
 				textScreen.append(screenBorder[TOP]);
 			textScreen.append(screenBorder[TOP_RIGHT]);
 			textScreen.append("\n");
 
+			// Screen drawing loop, rendering two vertical pixels per console line
 			for (int y = 0; y < HEIGHT; y += 2)
 			{
+				// Draw the left border
 				textScreen.append(screenBorder[LEFT]);
 				for (int x = 0; x < WIDTH; x++)
 				{
+					// Draw the pixel using the following characters: █▀▄ 
 					if ((screenBuffer[y * WIDTH + x]) && (screenBuffer[(y+1) * WIDTH + x]))
 					{
 						textScreen.append(CH8_BOTHPIXEL);
@@ -180,18 +206,24 @@ namespace CHIP8Demo
 						textScreen.append(CH8_NOPIXEL);
 					}
 				}
+
+				// Draw the right border
 				textScreen.append(screenBorder[RIGHT]);
 				textScreen.append("\n");
 			}
 
+			// Draw the lower border
 			textScreen.append(screenBorder[BOTTOM_LEFT]);
 			for (int i = 0; i < WIDTH; i++)
 				textScreen.append(screenBorder[BOTTOM]);
 			textScreen.append(screenBorder[BOTTOM_RIGHT]);
 
+			// Move the cursor to the top left corner
 			std::cout << "\033[0;0H";
+			// Print the screen buffer
 			std::cout << textScreen;
 
+			// Clear the "Update Screen" flag
 			UpdateRequired = false;
 		}
 	};
@@ -205,19 +237,51 @@ namespace CHIP8Demo
 	 */
 	class Chip8Test
 	{
+		/**
+		 * @brief CPU
+		 * 
+		 * This variable represents the CPU of the CHIP-8 system.
+		 */
 		CHIP8::CPU *cpu;
+
+		/**
+		 * @brief Keyboard
+		 * 
+		 * This variable represents the keyboard of the CHIP-8 system.
+		 */
 		std::shared_ptr<Keyboard> keyboard;
+
+		/**
+		 * @brief Display
+		 * 
+		 * This variable represents the display of the CHIP-8 system.
+		 */
 		std::shared_ptr<Display> display;
 	public:
+		/**
+		 * @brief Chip8Test
+		 * 
+		 * This constructor initializes the CHIP-8 test.
+		 */
 		Chip8Test();
-		Chip8Test(const std::string &romPath) : Chip8Test() { loadRom(romPath); }
 
-		void loadRom(const std::string &filename);
+		/**
+		 * @brief Load a ROM file
+		 * 
+		 * This function loads a ROM file.
+		 * 
+		 * @param filename The filename of the ROM file.
+		 * @return std::expected<void, std::string> : An expected object with an error message if the ROM file could not be loaded.
+		 */
+		std::expected<void, std::string> loadRom(const std::string &filename);
+
+		/**
+		 * @brief Play the ROM file
+		 * 
+		 * This function plays the ROM file.
+		 */
 		void playRom();
-		CHIP8::CPU *getCpu() { return cpu; }
 	};
-
-
 }
 
 #endif /* _CHIP8_HPP_ */
