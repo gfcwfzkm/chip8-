@@ -1,0 +1,1 @@
+// Enable extended screen mode for full-screen graphics.

@@ -3,7 +3,7 @@
 
 #include <cstdint>
 #include <memory>
-#include "..\system\display.hpp"
+#include "base_system/display.hpp"
 
 namespace CHIP8::SCHIP8
 {

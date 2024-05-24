@@ -1,0 +1,1 @@
+// Disable extended screen mode
