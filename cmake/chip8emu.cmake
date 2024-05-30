@@ -53,6 +53,16 @@ set(LIB_PATH_FILES
 	${LIB_PATH}/base_system/Instructions/FX55.hpp
 	${LIB_PATH}/base_system/Instructions/FX65.hpp
 	${LIB_PATH}/extensions/SCHIP8/display.hpp
+	${LIB_PATH}/extensions/SCHIP8/Instructions/00CN.hpp
+	${LIB_PATH}/extensions/SCHIP8/Instructions/00FB.hpp
+	${LIB_PATH}/extensions/SCHIP8/Instructions/00FC.hpp
+	${LIB_PATH}/extensions/SCHIP8/Instructions/00FD.hpp
+	${LIB_PATH}/extensions/SCHIP8/Instructions/00FE.hpp
+	${LIB_PATH}/extensions/SCHIP8/Instructions/00FF.hpp
+	${LIB_PATH}/extensions/SCHIP8/Instructions/DXYN.hpp	
+	${LIB_PATH}/extensions/SCHIP8/Instructions/FX30.hpp
+	${LIB_PATH}/extensions/SCHIP8/Instructions/FX75.hpp
+	${LIB_PATH}/extensions/SCHIP8/Instructions/FX85.hpp
 )
 add_library(chip8lib ${LIB_PATH_FILES})
 

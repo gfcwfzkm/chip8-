@@ -27,25 +27,51 @@ namespace CHIP8Demo
 		 * This map stores the key mapping.
 		 * The key mapping is used to map the console keys to the CHIP-8 keys.
 		 */
-		std::map<int, enum Key> keyMap = {
-			{ '1', Key::KEY_1 },
-			{ '2', Key::KEY_2 },
-			{ '3', Key::KEY_3 },
-			{ '4', Key::KEY_C },
-			{ 'q', Key::KEY_4 },
-			{ 'w', Key::KEY_5 },
-			{ 'e', Key::KEY_6 },
-			{ 'r', Key::KEY_D },
-			{ 'a', Key::KEY_7 },
-			{ 's', Key::KEY_8 },
-			{ 'd', Key::KEY_9 },
-			{ 'f', Key::KEY_E },
-			{ 'y', Key::KEY_A },
-			{ 'x', Key::KEY_0 },
-			{ 'c', Key::KEY_B },
-			{ 'v', Key::KEY_F }
-		};
+		std::map<int, enum Key> KeyMap;
 	public:
+		Keyboard(bool Chip8Keyboard = false) : CHIP8::Keypad()
+		{
+			// Initialize the key map
+			if (Chip8Keyboard)
+			{
+				KeyMap.insert({ '1', Key::KEY_1 });
+				KeyMap.insert({ '2', Key::KEY_2 });
+				KeyMap.insert({ '3', Key::KEY_3 });
+				KeyMap.insert({ '4', Key::KEY_4 });
+				KeyMap.insert({ '5', Key::KEY_5 });
+				KeyMap.insert({ '6', Key::KEY_6 });
+				KeyMap.insert({ '7', Key::KEY_7 });
+				KeyMap.insert({ '8', Key::KEY_8 });
+				KeyMap.insert({ '9', Key::KEY_9 });
+				KeyMap.insert({ '0', Key::KEY_0 });
+				KeyMap.insert({ 'a', Key::KEY_A });
+				KeyMap.insert({ 'b', Key::KEY_B });
+				KeyMap.insert({ 'c', Key::KEY_C });
+				KeyMap.insert({ 'd', Key::KEY_D });
+				KeyMap.insert({ 'e', Key::KEY_E });
+				KeyMap.insert({ 'f', Key::KEY_F });
+			}
+			else
+			{
+				KeyMap.insert({ '1', Key::KEY_1 });
+				KeyMap.insert({ '2', Key::KEY_2 });
+				KeyMap.insert({ '3', Key::KEY_3 });
+				KeyMap.insert({ 'q', Key::KEY_4 });
+				KeyMap.insert({ 'w', Key::KEY_5 });
+				KeyMap.insert({ 'e', Key::KEY_6 });
+				KeyMap.insert({ 'a', Key::KEY_7 });
+				KeyMap.insert({ 's', Key::KEY_8 });
+				KeyMap.insert({ 'd', Key::KEY_9 });
+				KeyMap.insert({ 'x', Key::KEY_0 });
+				KeyMap.insert({ 'y', Key::KEY_A });
+				KeyMap.insert({ 'c', Key::KEY_B });
+				KeyMap.insert({ '4', Key::KEY_C });
+				KeyMap.insert({ 'r', Key::KEY_D });
+				KeyMap.insert({ 'f', Key::KEY_E });
+				KeyMap.insert({ 'v', Key::KEY_F });
+			}
+		}
+
 		/**
 		 * @brief IsKeyPressed
 		 * 
@@ -96,10 +122,11 @@ namespace CHIP8Demo
 			if (CH8_KBHIT())
 			{
 				const int key = CH8_GETCH();
-				if (keyMap.find(key) != keyMap.end())
+				if (KeyMap.find(key) != KeyMap.end())
 				{
-					keys[keyMap[key]] = true;
+					keys[KeyMap.at(key)] = true;
 				}
+				// Check if the key variable is zero
 			}
 		}
 	};
@@ -176,28 +203,28 @@ namespace CHIP8Demo
 
 			// Draw the upper border
 			textScreen.append(screenBorder[TOP_LEFT]);
-			for (int i = 0; i < WIDTH; i++)
+			for (int i = 0; i < Width; i++)
 				textScreen.append(screenBorder[TOP]);
 			textScreen.append(screenBorder[TOP_RIGHT]);
 			textScreen.append("\n");
 
 			// Screen drawing loop, rendering two vertical pixels per console line
-			for (int y = 0; y < HEIGHT; y += 2)
+			for (int y = 0; y < Height; y += 2)
 			{
 				// Draw the left border
 				textScreen.append(screenBorder[LEFT]);
-				for (int x = 0; x < WIDTH; x++)
+				for (int x = 0; x < Width; x++)
 				{
 					// Draw the pixel using the following characters: █▀▄ 
-					if ((screenBuffer[y * WIDTH + x]) && (screenBuffer[(y+1) * WIDTH + x]))
+					if ((screenBuffer[y * Width + x]) && (screenBuffer[(y+1) * Width + x]))
 					{
 						textScreen.append(CH8_BOTHPIXEL);
 					}
-					else if (screenBuffer[y * WIDTH + x])
+					else if (screenBuffer[y * Width + x])
 					{
 						textScreen.append(CH8_UPPERPIXEL);
 					}
-					else if (screenBuffer[(y+1) * WIDTH + x])
+					else if (screenBuffer[(y+1) * Width + x])
 					{
 						textScreen.append(CH8_LOWERPIXEL);
 					}
@@ -214,7 +241,7 @@ namespace CHIP8Demo
 
 			// Draw the lower border
 			textScreen.append(screenBorder[BOTTOM_LEFT]);
-			for (int i = 0; i < WIDTH; i++)
+			for (int i = 0; i < Width; i++)
 				textScreen.append(screenBorder[BOTTOM]);
 			textScreen.append(screenBorder[BOTTOM_RIGHT]);
 

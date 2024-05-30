@@ -33,27 +33,55 @@ namespace CHIP8::SCHIP8
 		 */
 		static constexpr int HEIGHT = 64;
 
-		/**
-		 * @brief Allocate the display buffer
+		/** @brief High Resolution Mode
 		 * 
-		 * This function allocates the display buffer.
-		 * Called by the constructor of the base class.
+		 * This flag indicates if the high resolution mode is enabled.
 		 */
-		virtual void allocateDisplay() override
-		{
-			screenBuffer = std::make_unique<bool[]>(WIDTH * HEIGHT);
-		}
-
 		bool highResMode = false;
 	public:
-		void setHighRes(bool highRes)
+		/**
+		 * @brief Construct a new SCHIP-8 Display object
+		 * 
+		 * This constructor initializes the display buffer.
+		 */
+		SCHIP8Display()	: Display(HEIGHT, WIDTH) {}
+
+		/**
+		 * @brief Set High Resolution Mode
+		 * 
+		 * This function sets the high resolution mode.
+		 * 
+		 * @param highRes High resolution mode flag
+		 */
+		void SetHighRes(bool highRes)
 		{
 			highResMode = highRes;
 		}
 
-		bool getHighRes()
+		/**
+		 * @brief Get High Resolution Mode
+		 * 
+		 * This function returns the high resolution mode.
+		 * 
+		 * @return bool : High resolution mode flag
+		 */
+		bool GetHighRes()
 		{
 			return highResMode;
+		}
+
+		/**
+		 * @brief Scroll Down N Lines
+		 * 
+		 * This function scrolls the display down by N lines.
+		 * 
+		 * @param lines Number of lines to scroll down
+		 */
+		void ScrollDown(int lines)
+		{
+			lines = lines % (highResMode ? 16 : 8);
+
+			memcpy(screenBuffer.get(), screenBuffer.get() + Width * lines, Width * (Height - lines) * sizeof(bool));
 		}
 	};
 }

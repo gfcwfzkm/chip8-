@@ -15,17 +15,23 @@ namespace CHIP8
 	class Display
 	{
 	protected:
-		/** @brief Display Width
+		/** @brief Default Display Width
 		 * 
 		 * This constant represents the width of the display.
 		 */
-		static constexpr int WIDTH = 64;
+		static constexpr int DEFAULT_WIDTH = 64;
 
-		/** @brief Display Height
+		/** @brief Default Display Height
 		 * 
 		 * This constant represents the height of the display.
 		 */
-		static constexpr int HEIGHT = 32;
+		static constexpr int DEFAULT_HEIGHT = 32;
+
+		/** @brief Width and Height of the Display
+		 * 
+		 * Width and Height of the initialised display buffer.
+		*/
+		int Width, Height;
 
 		/** @brief Display Buffer
 		 * 
@@ -42,24 +48,27 @@ namespace CHIP8
 		bool UpdateRequired = false;
 
 		/**
-		 * @brief Allocate the display buffer
+		 * @brief Construct a new Display object
 		 * 
-		 * This function allocates the display buffer.
-		 * Called by the constructor.
+		 * This constructor initializes the display buffer and clears it.
+		 * 
+		 * @param height	Height in Pixels of the display buffer
+		 * @param width		Width in Pixels of the display buffer
 		 */
-		virtual void allocateDisplay()
+		Display(int height, int width) : Width(width), Height(height)
 		{
-			screenBuffer = std::make_unique<bool[]>(WIDTH * HEIGHT);
-		}
+			screenBuffer = std::make_unique<bool[]>(Height * Width);
+			Clear();
+		};
 	public:
 		/**
 		 * @brief Construct a new Display object
 		 * 
 		 * This constructor initializes the display buffer and clears it.
 		 */
-		Display()
+		Display() : Width(DEFAULT_WIDTH), Height(DEFAULT_HEIGHT)
 		{
-			allocateDisplay();
+			screenBuffer = std::make_unique<bool[]>(Height * Width);
 			Clear();
 		};
 
@@ -97,7 +106,7 @@ namespace CHIP8
 		 */
 		virtual constexpr int GetWidth()
 		{
-			return WIDTH;
+			return Width;
 		}
 
 		/**
@@ -107,7 +116,7 @@ namespace CHIP8
 		 */
 		virtual constexpr int GetHeight()
 		{
-			return HEIGHT;
+			return Height;
 		}
 
 		/**
@@ -121,10 +130,10 @@ namespace CHIP8
 		 */
 		virtual const bool &at(uint8_t x, uint8_t y) const
 		{
-			if (x >= WIDTH || y >= HEIGHT)
+			if (x >= Width || y >= Height)
 				throw std::out_of_range(std::format("Display::at() : Out of range access (x={}"
-					" >= WIDTH={} or y={} >= HEIGHT={})", x, WIDTH, y, HEIGHT));
-			return screenBuffer[size_t(y * WIDTH + x)];
+					" >= WIDTH={} or y={} >= HEIGHT={})", x, Width, y, Height));
+			return screenBuffer[size_t(y * Width + x)];
 		};
 
 		/**
@@ -138,10 +147,10 @@ namespace CHIP8
 		 */
 		virtual bool &at(uint8_t x, uint8_t y)
 		{
-			if (x >= WIDTH || y >= HEIGHT)
+			if (x >= Width || y >= Height)
 				throw std::out_of_range(std::format("Display::at() : Out of range access (x={}"
-					" >= WIDTH={} or y={} >= HEIGHT={})", x, WIDTH, y, HEIGHT));
-			return screenBuffer[size_t(y * WIDTH + x)];
+					" >= WIDTH={} or y={} >= HEIGHT={})", x, Width, y, Height));
+			return screenBuffer[size_t(y * Width + x)];
 		};
 
 		/**
@@ -151,7 +160,7 @@ namespace CHIP8
 		 */
 		virtual void Clear()
 		{
-			std::fill(screenBuffer.get(), screenBuffer.get() + WIDTH * HEIGHT, false);
+			std::fill(screenBuffer.get(), screenBuffer.get() + Width * Height, false);
 			UpdateRequired = true;
 		};
 

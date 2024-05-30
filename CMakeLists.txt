@@ -1,8 +1,5 @@
 ##
 ##  CMakeLists.txt
-##  Minimal C/C++ CMAKE Project
-##
-##  Created by Pascal Gesell on 21.02.2024
 ##
 
 cmake_minimum_required(VERSION 3.22)
