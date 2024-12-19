@@ -4,21 +4,22 @@
 using namespace CHIP8Demo;
 
 Chip8Test::Chip8Test()
+ : display(std::make_shared<Display>()), keyboard(std::make_shared<Keyboard>()), cpu(CHIP8::CPU(keyboard, display))
 {
-	display = std::make_shared<Display>();		// Create our inherited Display object
-	keyboard = std::make_shared<Keyboard>();	// Create our inherited Keyboard object
+	//display = std::make_shared<Display>();		// Create our inherited Display object
+	//keyboard = std::make_shared<Keyboard>();	// Create our inherited Keyboard object
 
-	// Create our CHIP8 CPU object with the keyboard and display objects
-	cpu = new CHIP8::CPU(keyboard, display);	
+	//// Create our CHIP8 CPU object with the keyboard and display objects
+	//cpu = new CHIP8::CPU(keyboard, display);	
 
 	// Clear the screen
-	cpu->GetDisplay()->Update();
+	cpu.GetDisplay()->Update();
 }
 
 std::expected<void, std::string> Chip8Test::loadRom(const std::string &filename)
 {
 	// Load the ROM file
-	auto romResult = cpu->GetMemory()->LoadRomFile(filename);
+	auto romResult = cpu.GetMemory()->LoadRomFile(filename);
 	if (!romResult)
 	{
 		// Return an error message if the ROM file could not be loaded
@@ -41,7 +42,7 @@ void Chip8Test::playRom()
 	while (true)
 	{
 		// Execute a cycle
-		CycleStatus = cpu->RunCycle();
+		CycleStatus = cpu.RunCycle();
 
 		// Check if the cycle was successful
 		if (!CycleStatus)
@@ -56,7 +57,7 @@ void Chip8Test::playRom()
 		{
 			// If the bool is false, an instruction returned an error
 			// Print the error message
-			auto lastInstruction = cpu->GetCurrentInstruction();
+			auto lastInstruction = cpu.GetCurrentInstruction();
 			std::cout << std::endl << "Emulator halted by instruction " <<
 				lastInstruction->GetMnemonic() << " "  CH8_ARROW " " <<
 				lastInstruction->GetAbortReason() << std::endl;
@@ -101,17 +102,17 @@ void Chip8Test::playRom()
 		keyboard->UpdateKeys();
 
 		// Check if the display needs to be updated
-		if (cpu->GetDisplay()->IsUpdateRequired())
+		if (cpu.GetDisplay()->IsUpdateRequired())
 		{
 			// Update the display
-			display->Update(cpu->GetTimers()->GetBeeperState());
+			display->Update(cpu.GetTimers()->GetBeeperState());
 			std::this_thread::sleep_for(std::chrono::milliseconds(15));
 		}
 
 		// Update the timers
 		if (std::chrono::steady_clock::now() - lastTimerUpdate > timerUpdateTime)
 		{
-			cpu->GetTimers()->DecrementTimers();
+			cpu.GetTimers()->DecrementTimers();
 			lastTimerUpdate = std::chrono::steady_clock::now();
 		}
 

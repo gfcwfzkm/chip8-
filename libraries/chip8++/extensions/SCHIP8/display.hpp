@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <algorithm>
 #include "base_system/display.hpp"
 
 namespace CHIP8::SCHIP8
@@ -81,7 +82,40 @@ namespace CHIP8::SCHIP8
 		{
 			lines = lines % (highResMode ? 16 : 8);
 
-			memcpy(screenBuffer.get(), screenBuffer.get() + Width * lines, Width * (Height - lines) * sizeof(bool));
+			memmove(screenBuffer.get(), screenBuffer.get() + Width * lines, Width * (Height - lines) * sizeof(bool));
+			std::fill(screenBuffer.get(), screenBuffer.get() + Width * lines, false);
+		}
+
+		/**
+		 * @brief Scroll Left 4 Pixels
+		 * 
+		 * This function scrolls the display left by 4 pixels.
+		 */
+		void ScrollLeft()
+		{
+			int pixels = highResMode ? 8 : 4;
+
+			for (int i = 0; i < Height; i++)
+			{
+				memmove(screenBuffer.get() + i * Width, screenBuffer.get() + i * Width + pixels, (Width - pixels) * sizeof(bool));
+				std::fill(screenBuffer.get() + i * Width + Width - pixels, screenBuffer.get() + i * Width + Width, false);
+			}
+		}
+
+		/**
+		 * @brief Scroll Right 4 Pixels
+		 * 
+		 * This function scrolls the display right by 4 pixels.
+		 */
+		void ScrollRight()
+		{
+			int pixels = highResMode ? 8 : 4;
+
+			for (int i = 0; i < Height; i++)
+			{
+				memmove(screenBuffer.get() + i * Width + pixels, screenBuffer.get() + i * Width, (Width - pixels) * sizeof(bool));
+				std::fill(screenBuffer.get() + i * Width, screenBuffer.get() + i * Width + pixels, false);
+			}
 		}
 	};
 }

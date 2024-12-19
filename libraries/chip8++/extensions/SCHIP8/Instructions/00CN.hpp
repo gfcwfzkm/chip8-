@@ -1,4 +1,3 @@
-// Scroll display N lines down
 #ifndef SCHIP8_INSTRUCTIONS_00CN_HPP
 #define SCHIP8_INSTRUCTIONS_00CN_HPP
 

@@ -265,11 +265,11 @@ namespace CHIP8Demo
 	class Chip8Test
 	{
 		/**
-		 * @brief CPU
+		 * @brief Display
 		 * 
-		 * This variable represents the CPU of the CHIP-8 system.
+		 * This variable represents the display of the CHIP-8 system.
 		 */
-		CHIP8::CPU *cpu;
+		std::shared_ptr<Display> display;
 
 		/**
 		 * @brief Keyboard
@@ -277,13 +277,13 @@ namespace CHIP8Demo
 		 * This variable represents the keyboard of the CHIP-8 system.
 		 */
 		std::shared_ptr<Keyboard> keyboard;
-
+		
 		/**
-		 * @brief Display
+		 * @brief CPU
 		 * 
-		 * This variable represents the display of the CHIP-8 system.
+		 * This variable represents the CPU of the CHIP-8 system.
 		 */
-		std::shared_ptr<Display> display;
+		CHIP8::CPU cpu;
 	public:
 		/**
 		 * @brief Chip8Test
