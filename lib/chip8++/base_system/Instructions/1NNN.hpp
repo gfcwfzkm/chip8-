@@ -15,7 +15,6 @@ namespace CHIP8::Instructions
 		public std::enable_shared_from_this<I1NNN>
 	{
 		uint16_t address = 0;
-		bool endlessJump = false;
 	public:
 		/**
 		 * @brief Execute the instruction to jump to address NNN

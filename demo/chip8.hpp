@@ -8,9 +8,9 @@
 #include <thread>
 #include <chrono>
 #include <map>
-#include <expected>
-#include "base_system/cpu.hpp"
-#include "base_system/Instructions/Instruction.hpp"
+#include <optional>
+#include "cpu.hpp"
+#include "Instructions/Instruction.hpp"
 #include "ch8_platform_specific.h"
 
 namespace CHIP8Demo
@@ -300,7 +300,7 @@ namespace CHIP8Demo
 		 * @param filename The filename of the ROM file.
 		 * @return std::expected<void, std::string> : An expected object with an error message if the ROM file could not be loaded.
 		 */
-		std::expected<void, std::string> loadRom(const std::string &filename);
+		std::optional<std::string> loadRom(const std::string &filename);
 
 		/**
 		 * @brief Play the ROM file

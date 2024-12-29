@@ -12,9 +12,9 @@ int main(int argc, char *argv[])
 		auto result = emu.loadRom(argv[1]);
 
 		// Check if the ROM file was loaded successfully
-		if (!result)
+		if (result.has_value())
 		{
-			std::cout << "Error: " << result.error() << std::endl;
+			std::cout << "Error: " << result.value() << std::endl;
 			return 1;
 		}
 		else 

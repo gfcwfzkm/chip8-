@@ -31,6 +31,9 @@ namespace CHIP8
 		 */
 		Timers() : delayTimer(0), soundTimer(0), beeperState(false) {};
 
+		// Virtual destructor
+		virtual ~Timers() {};
+
 		/**
 		 * @brief Reset the timers
 		 * 

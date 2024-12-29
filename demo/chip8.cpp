@@ -16,17 +16,17 @@ Chip8Test::Chip8Test()
 	cpu.GetDisplay()->Update();
 }
 
-std::expected<void, std::string> Chip8Test::loadRom(const std::string &filename)
+std::optional<std::string> Chip8Test::loadRom(const std::string &filename)
 {
 	// Load the ROM file
 	auto romResult = cpu.GetMemory()->LoadRomFile(filename);
 	if (!romResult)
 	{
 		// Return an error message if the ROM file could not be loaded
-		return std::unexpected("Error loading ROM file: " + romResult.error());
+		return ("Error loading ROM file: " + romResult.error());
 	}
 	// Return success
-	return std::expected<void, std::string>();
+	return {};
 }
 
 void Chip8Test::playRom()
