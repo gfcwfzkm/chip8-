@@ -10,15 +10,24 @@ project("Chip8 C++ Library" VERSION 1.0)
 option(USE_SCHIP "Add experimental SCHIP8 implementation" OFF)
 option(BUILD_CLI "Build the CLI application" OFF)
 
-## Compiler options - enable warnings + extra warnings
-add_compile_options(-Wall)
-
-## If we're using Gnu, use -Wextra (done so we can easily use MSVC without it complaining)
-if((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_C_COMPILER_ID MATCHES "GNU"))
-    add_compile_options(-Wextra)
+## Check if it's a supported / tested compiler
+if((NOT CMAKE_C_COMPILER_ID STREQUAL "GNU") AND 
+   (NOT CMAKE_C_COMPILER_ID STREQUAL "CLANG") AND
+   (NOT CMAKE_C_COMPILER_ID STREQUAL "MSVC"))
+	message(WARNING "Unknown/untested compiler being used")
 endif()
 
+## Ensure that both compilers are the same
+if(NOT CMAKE_C_COMPILER_ID STREQUAL CMAKE_CXX_COMPILER_ID)
+	message(FATAL_ERROR "C and C++ compilers do not match")
+endif()
 
+## Compiler options - enable bonus warnings
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    add_compile_options("/W4")
+else()
+	add_compile_options(-Wall -Wextra)
+endif()
 
 ## Using relative modern C++ features, so make them a requirement
 set(CMAKE_CXX_STANDARD 23)
@@ -37,40 +46,17 @@ if (USE_SCHIP)
     include_directories(${EXT_SCHIP8_PATH})
 endif()
 
-## Set the source files for the demo application
-#file(GLOB DEMO_SOURCES "${DEMO_PATH}/*.cpp")
-#file(GLOB DEMO_HEADERS "${DEMO_PATH}/*.hpp")
-
 ## Set the source files for the library
-file(GLOB BASE_HEADERS "${BASE_CHIP8PP_PATH}/*.hpp")
-file(GLOB BASE_SOURCES "${BASE_CHIP8PP_PATH}/*.cpp")
+file(GLOB HEADERS "${BASE_CHIP8PP_PATH}/*.hpp")
+file(GLOB SOURCES "${BASE_CHIP8PP_PATH}/*.cpp")
 
-set(HEADERS ${BASE_HEADERS}) #${DEMO_HEADERS})
-set(SOURCES ${BASE_SOURCES}) #${DEMO_SOURCES})
-
+## If SCHIP is enabled, add those files as well
 if (USE_SCHIP)
 	file(GLOB SCHIP8_HEADERS "${EXT_SCHIP8_PATH}/*.hpp")
 	file(GLOB SCHIP8_SOURCES "${EXT_SCHIP8_PATH}/*.cpp")
 	set(HEADERS ${HEADERS} ${SCHIP8_HEADERS})
 	set(SOURCES ${SOURCES} ${SCHIP8_SOURCES})
 endif()
-
-
-## We make a application executable
-#add_executable(chip8pp ${SOURCES} ${HEADERS})
-#if(WIN32)
-#	if((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_C_COMPILER_ID MATCHES "GNU"))
-#		set(BUILD_SHARED_LIBS OFF)
-#		set_target_properties(chip8pp PROPERTIES LINK_SEARCH_START_STATIC 1)
-#		set_target_properties(chip8pp PROPERTIES LINK_SEARCH_END_STATIC 1)
-#		#set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-#		#Static Libs
-#		#Set Linker flags
-#		target_link_options(chip8pp PRIVATE -static-libgcc -static-libstdc++ -static -fno-rtti)
-#		message("Hi")
-#	endif()
-#endif()
-
 
 ## Set the source files we want to build
 add_library(chip8pp SHARED)
